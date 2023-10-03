@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap v4.4.1 -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pretty-checkbox.min.css' %}">
+    <!-- fontawesome 6.4.2    https://fontawesome.com/docs/web/use-with/python-django -->
+    <!-- One file includes all the Font Awesome Free icons and utilities -->
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+
+
+    <title>Title of the document</title>
+</head>
+
+<body>
+<!-- navbar start -->
+{% include 'templates_parts/_navbar.html' %}
+<!-- navbar end -->
+    {% block content %}
+    
+
+
+
+    {% endblock %}
+<!-- footer start  -->
+{% include 'templates_parts/_footer.html' %}
+<!-- footer end  -->
+
+
+    <script src="{% static 'js/jquery-3.4.1.slim.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+        $(".year").text( (new Date).getFullYear() );
+    </script>
+</body>
+
+</html>

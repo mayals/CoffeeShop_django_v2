@@ -1,0 +1,93 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+
+<br><br><br>  
+ 
+<div class="p-2 m-1 rounded border border-warning">
+
+
+    <div class="container">
+        <section>
+            <h2 class="text-center">Cart</h2>
+            <hr>
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header"><span class='font-weight-bold'>Order Informations</span></div>
+                <div class="card-body">
+                  <h6 class="card-title"><span class='font-weight-bold'>Id:</span> {{ order.id }}</h6>
+                  <h6 class="card-title"><span class='font-weight-bold'>Date:</span> {{ order.order_date }}</h6>
+                  <h6 class="card-title"><span class='font-weight-bold'>Owner Name:</span> {{ order.user.get_user_fullname }}</h6>
+                  <h6 class="card-title"><span class='font-weight-bold'>Total Amount:</span> {{ order.total_amount }} $</h6>
+                </div>
+            </div>
+
+            <!--  create product form  -->
+            <div class='row  justify-content-center'>
+                
+                <div style="overflow-x:auto;" class="table-responsive">    
+                    <table class="table table-hover table-sm">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price($)</th>
+                            <th scope="col">Quantity Change</th>
+                            <th scope="col">Price*Quantity($)</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for item in orderproducts %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><img width="80" height="80" src="{{ item.product.photo.url }}" class="img-thumbnail rounded-lg" alt={{ product.name }}></td>
+                                <td>{{ item.product_name }}</td>
+                                <td>{{ item.price_at_order }}</td>
+                                <td >
+                                    <span>
+                                        <a href="{% url 'ecommerce:decrease-quent' order_id=order.id  item_id=item.id  %}" class="btn btn-sm btn-light">
+                                            <span class='font-weight-bold'> - </span>
+                                        </a>
+                                    </span>
+                                    <span>
+                                        {{ item.quantity }}
+                                    </span>
+                                    <span>
+                                        <a href="{% url 'ecommerce:increase-quent' order_id=order.id  item_id=item.id  %}" class="btn btn-sm btn-light">
+                                            <span class='font-weight-bold'> + </span>
+                                        </a>
+                                    </span>
+                                </td>    
+                                <td>{{ item.product_amount }}</td>
+                                <td>
+                                    <a  href="{% url 'ecommerce:delete-item' order_id=order.id  item_id=item.id  %}" class="btn btn-sm btn-outline-danger">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                                <p class='text-warning text-center'>Empty Cart!
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                    </svg>
+                                </p>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                      <br><br><br><br><br><br>    
+                    </div>    
+                    
+
+                
+            </div>
+
+        </section>
+    </div>
+
+
+</div>
+{% endblock content %}

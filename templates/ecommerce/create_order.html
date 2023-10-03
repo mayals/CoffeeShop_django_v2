@@ -1,0 +1,42 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+
+<br><br><br>  
+ 
+<div class="my-form container p-5 my-5 rounded border border-warning">
+
+
+    <div class="container">
+        <section>
+            <h2 class="text-center">Create a new product:</h2>
+            <hr>
+            <!--  create product form  -->
+            <div class='row  justify-content-center'>
+                <div class='col-md-8'>
+                    
+                    
+                    <form method='POST' class='form-group' enctype='multipart/form-data' novalidate>
+                        {% csrf_token %}
+                        <div>
+                            {{form|crispy}}
+                        </div>
+                        <div>
+                            <div class='btn-group'>
+                                <button type="submit" class="btn btn-info">Create Order</button>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+
+</div>
+{% endblock content %}

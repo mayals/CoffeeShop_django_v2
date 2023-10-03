@@ -1,0 +1,114 @@
+    {% load static %}
+    
+    <!-- navbar start -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+      <!-- LOGO in navbar -->  
+      <a class="navbar-brand" href="#">
+            <img src="{% static 'img/3.png' %}" class="img-brand" alt="My Coffee">
+            My Coffee
+        </a>
+
+        <!-- navbarSupportedContent in navbar --> 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+              <!-- index burtton in navbar -->
+              {% if 'index' in request.path %}
+              <li class="nav-item active">
+              {% else %}
+              <li class="nav-item">
+              {% endif %}  
+                  <a class="nav-link" href="{% url 'pages:index' %}">Home <span class="sr-only">(current)</span></a>
+              </li>
+
+              <!-- Join us navbarDropdown in navbar -->
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Join us</a>  
+                  {% if request.user.is_authenticated %}
+                    <div class="dropdown-menu animate slideIn" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'users:profile-view' %}">Profile</a>
+                      <a class="dropdown-item" href="{% url 'products:user-favorites' %}">Favorites</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="{% url 'users:signout' %}">Sign out</a>
+                    </div>
+                  {% else %} 
+                    <div class="dropdown-menu animate slideIn" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'users:signin' %}">Sign in</a>
+                      <a class="dropdown-item" href="{% url 'users:signup' %}">Sign up</a> 
+                    </div> 
+                  {% endif %}
+              </li>
+
+              <!-- coffee burtton in navbar -->
+              {% if 'coffee' in request.path %}
+              <li class="nav-item active"id="coffee-nav-item">
+              {% else %}
+              <li class="nav-item" id="coffee-nav-item"> 
+              {% endif %} 
+                  <a class="nav-link" href="{% url 'pages:coffee' %}">Coffee</a>
+              </li>
+
+             <!-- admin navbarDropdown in navbar -->
+              {% if request.user.is_authenticated and request.user.is_superuser %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Admin
+                </a>
+                <div class="dropdown-menu animate slideIn" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{% url 'products:add-new-product' %}">Add Product</a>
+                <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">All Users</a>
+                <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Dashboard</a>
+                </div>
+              </li>
+              {% endif %}
+               
+              <!-- about burtton in navbar -->
+              {% if 'about' in request.path %}
+              <li class="nav-item active">
+              {% else %}
+              <li class="nav-item">
+              {% endif %}  
+                <a class="nav-link" href="{% url 'pages:about' %}">About</a>
+              </li>
+              
+            </ul>
+
+             <!-- CART burtton in navbar -->
+            {% if request.user.is_authenticated %}
+              <a href="{%  url 'ecommerce:cart-view' order_id=order_id %}" class="btn mr-2">
+                <i class="fa-solid fa-cart-shopping fa-lg" style="color: #ffffff;"></i>
+                    <span class="badge badge-light">{{items_quant}}</span>
+              </a>
+            {% else %} 
+              <span class="mr-2 text-light">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+              </span>  
+            {% endif %} 
+
+            <!-- search form in navbar -->
+            <form action="{% url 'products:products' %}" class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2 remove-outline" name="schname" type="search" placeholder="Product name .." aria-label="Search">
+              <div class="btn-group" role="group">
+                <button class="btn btn-warning my-2 my-sm-0" type="submit">Search</button>
+                <a href="{% url 'products:search' %}" class="btn btn-warning my-2 my-sm-0" type="submit">
+                  <svg class="bi bi-gear" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 014.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 01-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 011.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 012.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 012.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 011.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 01-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 018.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 001.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 00.52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 00-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 00-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 00-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 00-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 00.52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 001.255-.52l.094-.319z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M8 5.754a2.246 2.246 0 100 4.492 2.246 2.246 0 000-4.492zM4.754 8a3.246 3.246 0 116.492 0 3.246 3.246 0 01-6.492 0z" clip-rule="evenodd"/>
+                  </svg>
+                </a>
+              </div>
+            </form>
+
+        </div>
+    </nav>
+
+
+<!-- navbar end  -->

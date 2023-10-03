@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load hitcount_tags %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+    
+<div class="container  my-5 rounded border border-warning">
+        
+    <h2 class="text-center">Product Details</h2>
+    <hr>{{product.id}}
+
+  <section>
+    <div class="row" >
+          <div class="card mb-3 w-100" >
+            <div class="row no-gutters">
+              
+              <div class="col-md-4">
+                <img src="{{ product.photo.url }}" class="card-img" alt={{ product.name }}>
+              </div>
+
+              <div class="col-md-8">
+                <div class="card-body">
+                        <h5 class="card-title" id="productName">{{product.name}}</h5>
+                        <hr>
+                        <p class="card-text" id="description">{{product.description}}</p>
+                        <hr>
+                        <p class="card-text">Current Price: <span id="price" class="bg-dark text-light rounded-circle p-2">{{product.price}}</span></p>
+                      
+
+                      <!--  only authenticated users see this div  --> 
+                      {% if request.user.is_authenticated %}
+                      <div>
+                          <!--  add to cart  form for authenticated user -->
+                          <div class="card-text border rounded border-secondary p-2 my-1">
+                                  <form method='GET' action="{% url 'ecommerce:add-to-cart' pro_id=product.id %}"  class='form-group' novalidate>
+                                    {% csrf_token %}
+                                    {{form}}
+                                    <div class='btn-group'>
+                                      <button type="submit"  class="btn btn-sm btn-success"><i class="fa-solid fa-xl fa-cart-plus"></i></button> 
+                                    </div>
+                                  </form>
+
+                                  <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="{% url 'ecommerce:cart-view' order_id=order.id  %}"  type="link" class="btn btn-sm btn-light">Go to Cart</a>
+                                    <a href="{% url 'products:products'  %}"    type="link" class="btn btn-sm btn-light">Continue Shopping</a>
+                                  </div>
+                          </div>
+                          <div>
+                              <!-- Like/Dislike button  for authenticated user --> 
+                              {% if like == 1 %}
+                              {{ like}}
+                              <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl red-color fa-heart"></i></a>  
+                              {% elif like == 0 %}
+                              {{ like}}
+                              <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
+                              {% endif %}
+
+                              <!-- add to fav  for authenticated user -->                               
+                              <a href="{% url 'products:user-favorites' user_id=request.user.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl fa-folder-plus"></i></a>
+                             
+                              <!-- hit count for authenticated user -->
+                             <span><i class="fa-regular fa-eye fa-xl"></i> {% get_hit_count for product %}</span>
+                          
+                             <!--  edit & delete for admin only --> 
+                             {% if request.user.is_authenticated and request.user.is_superuser %}
+                         
+                                <!-- edit this product--> 
+                                <a href="{% url 'products:update-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-xl fa-pen-to-square"></i></a>
+                                <!-- delete this product-->
+                                <a href="{% url 'products:delete-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-xl fa-trash-can"></i></a>
+                          
+                             {% endif %}
+                          </div>
+
+                      </div>
+                      {% endif %}
+                      <!-- end  div of only authenticated   --> 
+
+
+                      <!-- start div of  only anonymous see this div --> 
+                      {% if request.user.is_anonymous %}
+                      <div>
+                        <!-- add-to-cart form  for anonymous --> 
+                        <div class="card-text border rounded border-secondary p-2 my-1">
+                             
+                            <form method='GET' action="{% url 'ecommerce:add-to-cart' product.id %}"  class='form-group' novalidate>
+                              {% csrf_token %}
+                              {{form}}
+                              <div class='btn-group'>
+                                <button type="submit"  class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Need Login to add this product to the cart"><i class="fa-solid fa-xl fa-cart-plus"></i></button> 
+                              </div>
+                            </form>
+                            <!-- All Products -->
+                            <div>
+                              <a href="{% url 'products:products'  %}" type="link" class="btn btn-sm btn-light">All Products</a>
+                            </div>
+                        </div>  
+                        <!-- Like/Dislike button--> 
+                        <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2" data-toggle="tooltip" data-placement="top" title="Need Login to like this product"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
+                        <!-- add to fav--> 
+                        <a href="{% url 'products:user-favorites' user_id=request.user.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl fa-folder-plus"></i></a>
+                      </div>
+                      {% endif %}
+                      <!-- end div of  only anonymous  --> 
+
+
+                </div>
+              </div>
+          
+            </div>  
+          </div>
+    </div>      
+  </section> 
+    
+    <!-- review section -->
+    <section>
+      <!-- review list -->
+      <div class="myrow my-1">
+          <div class="card  my-1">
+            <div class="card-header">
+              <h4 class='text-center'>Product Reviews</h4>
+            </div>
+            <div class="card-body">
+                {% for review in reviews %}  
+                  <div class="media mb-3">
+                    <div class="mr-2"> {{  review.user.profile_image }}
+                      <img width="60" hight="60" class="rounded-circle border img-thumbnail" src="{{  review.user.get_user_profile.profile_image.url }}">
+                    </div>
+                    <div class="media-body">
+                      <p>{{ review.rating_text }}</p>
+                      <small class="text-muted">Posted by {{ review.user.get_user_fullname }} on {{ review.created_at }}</small>
+                    </div>
+                  </div>
+                  <br>
+                {% empty %}
+                No review yet !
+                {% endfor %}
+            </div>	
+          </div>
+      </div>  
+      <!--end review list -->
+
+      <!-- add your review  -->
+      <div class="row myrow my-1"> 
+              <h4 class='text-center my-3'>laeve Reviews</h2>
+                <!-- add  review  -->
+                <form method='GET' action="{% url 'products:review_rating_product' pro_id=product.id  %}"  class="form-group" novalidate>
+                      <!--rating_value-->
+                      <div class="rating-container my-2">
+                        <input  type="radio" name="rating_value" id="star_5" value="5">
+                        <label  for="star_5"><i class="fa fa-star"></i></label>
+                    
+                        <input  type="radio" name="rating_value" id="star_4" value="4">
+                        <label  for="star_4"><i class="fa fa-star"></i></label>
+                    
+                        <input  type="radio" name="rating_value" id="star_3" value="3">
+                        <label  for="star_3"><i class="fa fa-star"></i></label>
+                          
+                        <input  type="radio" name="rating_value" id="star_2" value="2">
+                        <label  for="star_2"><i class="fa fa-star"></i></label>
+                    
+                        <input  type="radio" name="rating_value" id="star_1" value="1">
+                        <label  for="star_1"><i class="fa fa-star"></i></label>
+                      </div>
+                      <!--rating_text-->
+                      <div>
+                        <textarea name='rating_text' class="form-control" rows="5" placeholder='your rating text'></textarea>
+                      </div>
+                      <div class='btn-group'>
+                        <button type="submit"  class="btn btn-sm btn-warning my-2">add</button> 
+                      </div>
+                </form>
+      </div>
+      <!-- end add your review  -->
+      
+    </section>
+    <!--  end review section -->   
+</div>                        
+{% endblock %}

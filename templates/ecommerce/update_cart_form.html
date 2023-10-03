@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+    
+    <div class="container p-5 my-5 rounded border border-warning">
+        
+      <h2 class="text-center">update cart form</h2>
+      <hr>
+
+      <section>
+          
+        <div class="row p-5 " >
+
+          <div class="card mb-3 w-100" >
+            <div class="row no-gutters">
+                  
+                  <div class="col-md-4">
+                    <img src="{{ product.photo.url }}" class="card-img" alt={{ product.name }}>
+                  </div>
+
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title" id="productName">{{product.name}}</h5>
+                      <hr>
+                      <p class="card-text" id="description">{{product.description}}</p>
+                      <hr>
+                      <p class="card-text">Current Price: <span id="price" class="bg-dark text-light rounded-circle p-2">{{product.price}}</span></p>
+                      
+                      <div class="card-text border rounded border-secondary p-2 my-1">
+                        <form method='GET'  action="{% url 'ecommerce:update-cart-form-view' product.id %}"  class='form-group' novalidate>
+                          {% csrf_token %}
+                          {{form}}
+                          <div class='btn-group'>
+                            <button type="submit"  class="btn btn-sm btn-success">Update</button> 
+                          </div>
+                        </form>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                          <a href="{% url 'ecommerce:cart-view' order_id=order_id  %}" class="btn btn-sm btn-light">Go to Cart</a>
+                          <a href="{% url 'products:products'  %}" type="link" class="btn btn-sm btn-light">Continue Shopping</a>
+                        </div> 
+  
+                      </div>
+                    
+                      
+                      
+                      {% if request.user.is_authenticated and request.user.is_superuser %}
+                      <!-- admin only --> 
+                        <div>
+                          <!-- Like/Dislike button--> 
+                          {% if like == 1 %}
+                          <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-2xl red-color fa-heart"></i></a>  
+                          {% elif like == 0 %}
+                          <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-2xl fa-heart"></i></a>  
+                          {% endif %} 
+                          <!-- add to fav--> 
+                          <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-2xl fa-folder-plus"></i></a>
+                          <!-- edit this product--> 
+                          <a href="{% url 'products:update-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-2xl fa-pen-to-square"></i></a>
+                          <!-- delete this product-->
+                          <a href="{% url 'products:delete-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-2xl fa-trash-can"></i></a>
+                        </div>
+                      {% else %}
+                      <!-- all users  --> 
+                        <div>
+                          <!-- Like/Dislike button--> 
+                          {% if like == 1 %}
+                          <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-2xl red-color fa-heart"></i></a>  
+                          {% elif like == 0 %}
+                          <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-2xl fa-heart"></i></a>  
+                          {% endif %}
+                          <!-- add to fav-->                               
+                          <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-2xl fa-folder-plus"></i></a>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+            </div>
+          </div>
+
+        </div>
+          
+      </section>
+      
+    </div>
+
+{% endblock %}

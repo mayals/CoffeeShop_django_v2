@@ -1,0 +1,77 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+
+<br><br><br>  
+ 
+<div class="p-2 m-1 rounded border border-warning">
+
+
+    <div class="container">
+        <section>
+            <h2 class="text-center">All Users</h2>
+
+           
+
+            <!--  create product form  -->
+            <div class='row  justify-content-center'>
+                
+                <div style="overflow-x:auto;" class="table-responsive">    
+                    <table class="table table-hover table-sm">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Contact</th>
+                            <th scope="col">Orders</th>
+                            <th scope="col">Order Status</th>
+                            <th scope="col">Date of join</th>
+                            <th scope="col">Last login</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><img width="80" height="80" src="{{ user.get_user_profile.profile_image.url }}" class="img-thumbnail rounded-lg" alt={{ product.name }}></td>
+                                <td>{{ user.get_user_fullname }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <a href="mailto:{{ user.email }}" class="btn btn-sm btn-outline-info">
+                                       <i class="fa-regular fa-envelope"></i>
+                                    </a>
+                                </td>
+                                <td>{% for order in user.get_user_orders  %} {{ order }}{% endfor %}</td>
+                                <td>{% for order in user.get_user_orders  %} {{ order.status }}{% endfor %}</td>
+                                <td>{{ user.created_at }}</td>
+                                <td>{{ user.last_login }}</td>
+                                <td>
+                                    <a  href="" class="btn btn-sm btn-outline-danger">
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <p class='text-warning text-center'>No users!
+                            </p>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                      <br><br><br><br><br><br>    
+                    </div>    
+                    
+
+                
+            </div>
+
+        </section>
+    </div>
+
+
+</div>
+{% endblock content %}

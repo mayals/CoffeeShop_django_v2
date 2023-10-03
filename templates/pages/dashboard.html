@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load hitcount_tags %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+    
+
+    <!--HTML start -->
+    <div class="container  my-5 rounded border border-warning">
+            
+          <h2 class="text-center">Dashboard</h2>
+          <hr>
+
+              <div class='row p-3'>
+                <div class='col-md-8 shadow'>
+                  <canvas id="myChart" width="100" height="100"></canvas>
+                </div>
+              </div>
+
+    </div>
+    <!--HTML end -->      
+
+
+
+
+
+    <!--javascript -->
+    <!--  https://www.chartjs.org/docs/latest/getting-started/#create-a-chart -->
+    <!-- https://www.chartjs.org/docs/latest/charts/bar.html -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+      const ctx = document.getElementById('myChart');
+    
+      new Chart(ctx, {
+        // type: 'bar', 
+        type: 'pie', 
+        //type: 'line',
+        data: {
+          
+          labels  : [{% for product in products %}  "{{ product.name }}", {% endfor %}],
+          datasets: [
+                      {
+                        label      : '# reviews count',
+                        data       : [{% for product in products %}  {{ product.reviews_count }}, {% endfor %}],
+                        borderWidth: 1,
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)',
+                          'rgb(201, 203, 207)'
+                        ],
+                      }
+          ]
+        },
+        options: {
+          scales: {
+                    y: { beginAtZero: true }
+          }
+        }
+      });
+    </script>
+    <!--end script-->
+
+  
+{% endblock %}
+

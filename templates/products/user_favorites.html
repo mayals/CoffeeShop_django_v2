@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'includes/messages.html' %}
+
+{% comment %} <a href="{% url 'products:product' pro_id=product.id %}">View Product</a> {% endcomment %}
+
+    <div class="my-form container p-5 my-5 rounded border border-warning">
+
+      <!--Fvorites Products -->
+      <section>
+        <h1 class="text-center">Fvorites Products({{likes.count}})</h1>
+        <hr>
+        <div class="container-fluid">
+          {% for like in likes %}
+            <div class="row">
+             
+              <div class="col-sm-2  d-flex align-items-center">
+                <a href="{% url 'products:product' pro_id=like.product.id %}" class="btn btn-outline">
+                  <img width="80" height="80" src="{{ like.product.photo.url }}" class="img-thumbnail rounded-lg" alt={{ like.product.name}}>
+                </a>
+              </div>
+              
+              <div class="col-sm-9 d-flex align-items-center">
+                <h5>{{ like.product.name }}</h5>
+              </div>
+
+            </div>
+          {% empty %}
+            <div>
+                <h3>No Fvorites Products.</h3>
+            </div>
+          {% endfor %}  
+        
+        </div>
+      </section>
+
+    </div>
+{% endblock %}

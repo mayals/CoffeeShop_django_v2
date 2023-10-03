@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% include 'includes/messages.html' %}
+
+<br><br>
+
+
+    <div class="my-form container p-5 my-5 rounded border border-warning">
+        <section>
+            <h2 class="text-center">Sign In</h2>
+            <hr>
+            
+            <!-- signin form  -->
+            <div class='row  justify-content-center'>
+                <div class='col-md-8'>
+                    
+                    
+                    <form method="POST" class="form-group" novalidate>
+                        {% csrf_token %}
+                        <div>
+                            {{form|crispy}}
+                        </div>
+                        <div>
+                            <button type='submit' class="btn btn-warning">Login</button>
+                        </div>
+                    </form>
+    
+    
+                    
+                </div>
+            </div>
+    
+        </section>
+
+    </div>
+
+
+
+
+
+
+{% endblock %}
