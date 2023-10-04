@@ -78,16 +78,44 @@
                             {% endfor %}
                         </tbody>
                       </table>
-                      <br><br><br><br><br><br>    
+                        
                     </div>    
-                    
+                                    
 
-                
-            </div>
 
+
+            
+
+        </div>
+        
         </section>
+
     </div>
 
 
 </div>
+
+
+<h4 class=" text-center">
+    Total Amount: <span class="badge bg-warning">({{ order.total_amount }} $)</span><span class="badge text-bg-secondary">({{items_quant}}) items</span>
+</h4>
+
+
+
+
+<div class="row justify-content-between my-5 text-center">
+    <div class="col-8">
+        <a  href="{% url 'products:products' %}" class="btn btn-secondary">
+            Continue Shopping
+        </a>
+    </div>
+    <div class="col-4">
+
+        <a  href="" class="btn btn-secondary">
+            Ceckout
+        </a>
+    </div>
+</div>
+
+
 {% endblock content %}

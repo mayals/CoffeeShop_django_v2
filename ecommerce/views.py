@@ -7,7 +7,7 @@ from .forms import OrderProductCartForm
 from .models import Product, OrderProduct, Order 
 
 
-########################################## add_to_cart & creat order ######################################################
+########################################## add_to_cart & create order ######################################################
 @login_required(login_url='users:signin')
 def add_to_cart(request, pro_id):
     user = request.user
