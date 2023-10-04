@@ -14,7 +14,9 @@
             <h2 class="text-center">Cart</h2>
             <hr>
             <div class="card bg-light mb-3" style="max-width: 18rem;">
-                <div class="card-header"><span class='font-weight-bold'>Order Informations</span></div>
+                <div class="card-header">
+                    <span class='font-weight-bold'>Order Informations</span>
+                </div>
                 <div class="card-body">
                   <h6 class="card-title"><span class='font-weight-bold'>Id:</span> {{ order.id }}</h6>
                   <h6 class="card-title"><span class='font-weight-bold'>Date:</span> {{ order.order_date }}</h6>
@@ -81,14 +83,29 @@
                         
                     </div>    
                                     
-
-
-
-            
-
         </div>
         
-        </section>
+    </section>
+
+    <section>
+        <h4 class=" text-center">
+            Total Amount: <span class="badge bg-warning">({{ order.total_amount }} $)</span><span class="badge text-bg-secondary">({{items_quant}}) items</span>
+        </h4>
+    </section>
+
+    <section>
+        <div class="row my-5 d-flex justify-content-between">
+            <a  href="{% url 'products:products' %}" class="btn btn-secondary">
+                Continue Shopping
+            </a>
+            <a  href="{%  url 'ecommerce:checkout-view'  order_id=order.id  %}" class="btn btn-secondary">
+                Checkout
+            </a>
+        </div>
+    </section>
+
+
+
 
     </div>
 
@@ -96,26 +113,10 @@
 </div>
 
 
-<h4 class=" text-center">
-    Total Amount: <span class="badge bg-warning">({{ order.total_amount }} $)</span><span class="badge text-bg-secondary">({{items_quant}}) items</span>
-</h4>
 
 
 
 
-<div class="row justify-content-between my-5 text-center">
-    <div class="col-8">
-        <a  href="{% url 'products:products' %}" class="btn btn-secondary">
-            Continue Shopping
-        </a>
-    </div>
-    <div class="col-4">
-
-        <a  href="" class="btn btn-secondary">
-            Ceckout
-        </a>
-    </div>
-</div>
 
 
 {% endblock content %}

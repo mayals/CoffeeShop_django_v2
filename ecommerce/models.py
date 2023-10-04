@@ -35,8 +35,8 @@ class PaymentStatus(models.TextChoices):
     UNPAID = 'Unpaid' 
 
 class PaymentMode(models.TextChoices):
-    COD  = 'COD'
-    CARD = 'CARD' 
+    COD  = 'COD'    # Cash on Delivery
+    CARD = 'CARD'   # Card of Bank
 
 class Order(models.Model):
     id             = ShortUUIDField(primary_key=True, unique=True, length=6, max_length=6, editable=False)                     
@@ -52,6 +52,7 @@ class Order(models.Model):
     state          = models.CharField(max_length=100, default="", blank=False)
     country        = models.CharField(max_length=100, default="", blank=False)
     phone_no       = models.CharField(max_length=100, default="", blank=False)
+    
     payment_status = models.CharField(max_length=30, choices=PaymentStatus.choices, default=PaymentStatus.UNPAID)
     payment_mode   = models.CharField(max_length=30, choices=PaymentMode.choices, default=PaymentMode.COD)
     status         = models.CharField(max_length=60, choices=OrderStatus.choices, default=OrderStatus.PROCESSING)

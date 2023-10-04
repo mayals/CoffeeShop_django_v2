@@ -144,6 +144,26 @@ def delete_orderproduct(request,order_id,item_id):
 
 
 
+
+@login_required(login_url='users:signin')
+def checkout_view(request,order_id):
+    order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
+    orderproducts = OrderProduct.objects.all().filter(order=order)
+    #shipping_address_form = ShippingAdressForm()
+
+    context = {
+        'title'         : 'Checkout Page', 
+        'order'         : order,
+        'orderproducts' : orderproducts,
+        #'form'          : shipping_address_form ,
+    }    
+    return render(request,'ecommerce/checkout.html', context)
+
+
+
+
+
+
 ########################################## add_to_cart & creat order ######################################################
 # @login_required(login_url='users:signin')
 # def update_cart_form_view(request, pro_id):

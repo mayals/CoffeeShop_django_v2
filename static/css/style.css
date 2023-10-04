@@ -287,3 +287,18 @@ input:checked ~ label{
 } 
 
 /* end rating stars style  */
+
+
+/* chechout page*/
+.row-checkout {
+ 
+  display: flex;
+
+  margin-right: -15px;
+  margin-left: -15px;
+  align-content: center;
+  flex-direction: column;
+  justify-content: center;
+  
+  align-items: center;
+}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'includes/messages.html' %}
+
+  
+<div class="my-form m-0">
+    <br><br><br>
+    <div class="container">
+        <div class ='justify-content-center'>
+
+
+                <div class="row-checkout">
+                    <div class="col-12">
+
+                        <div class="card border-light mb-4 shadow">
+                            <div class="card-header text-center">
+                                <b>Order Informations</b>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title"><span class='font-weight-bold'>Id:</span> {{ order.id }}</h6>
+                                <h6 class="card-title"><span class='font-weight-bold'>Date:</span> {{ order.order_date }}</h6>
+                                <h6 class="card-title"><span class='font-weight-bold'>Owner Name:</span> {{ order.user.get_user_fullname }}</h6>
+                                <h6 class="card-title"><span class='font-weight-bold'>Total Amount:</span><span class="bg-warning"> {{ order.total_amount }}$   for   ({{items_quant}}) items</span></h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row-checkout">
+                    <div class="col-12">
+                        <div class="card border-light mb-4 shadow">
+                            <div class="card-header text-center">
+                                <b>Shipping Address Settings</b>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text"><b>Country:</b>country.</p>
+                                <p class="card-text"><b>City:</b> city.</p>
+                                <p class="card-text"><b>Zip Code:</b>  zip_code.</p>
+                                <p class="card-text"><b>Street:</b> street.</p>
+                                <p class="card-text"><b>State:</b> state.</p>
+                                <p class="card-text"><b>Pone Number:</b> PHONE NUMBER.</p>
+                                <div class="d-flex justify-content-end">
+                                    <a href="#" class="btn btn-sm btn-success ">Edit Address</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-checkout">
+                    <div class="col-12">
+                        <div class="card border-light mb-4 shadow">
+                            <div class="card-header text-center">
+                            <b>Payment Mode Choise</b>
+                            </div>
+                            <div class="card-body">
+                            <h5 class="card-title">Your Shipping address</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="#" class="btn btn-success">Edit Address</a>
+                            </div>
+                        </div>
+                    </div>   
+                </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
