@@ -1,5 +1,6 @@
 {% extends 'base.html' %} 
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
 {% include 'includes/messages.html' %}
@@ -56,16 +57,31 @@
                     <div class="col-12">
                         <div class="card border-light mb-4 shadow">
                             <div class="card-header text-center">
-                            <b>Payment Mode Choise</b>
+                               <b>Payment Mode Choise</b>
                             </div>
                             <div class="card-body">
-                            <h5 class="card-title">Your Shipping address</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-success">Edit Address</a>
+                                <h5 class="card-title">Please choise only one of the payment mode bellow : </h5>
+                                <br>
+                                
+                                <div class="row row-cols-1 row-cols-md-2">
+                                    <div class="col mb-5">
+                                        <div class="text-center">
+                                            <img src="{% static 'img/card_payment.png' %}"  width="100px" height="100px" alt="card payment mode">
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="col mb-3">
+                                        <div class="text-center">
+                                            <img src="{% static 'img/cash_payment.png' %}" width="100px" height="100px" alt="...">
+                                        </div>
+                                    </div>  
+                                </div>
+                                
                             </div>
                         </div>
                     </div>   
                 </div>
+
         </div>
     </div>
 
