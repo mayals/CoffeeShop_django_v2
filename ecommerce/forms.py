@@ -30,7 +30,7 @@ class ShippingAdressForm(forms.ModelForm):
                                             widget=CountrySelectWidget(attrs={'placeholder': 'Your City Name here ..',
                                                                               'class': 'custom-select d-block w-100' } )
                                         )                                                            
-    city     = forms.CharField(max_length=15, label="City", required=True,
+    city     = forms.CharField(max_length=100, label="City", required=True,
                                         help_text='please enter your City name',
                                         error_messages={
                                             'required': 'reqired City Name'},
@@ -38,7 +38,7 @@ class ShippingAdressForm(forms.ModelForm):
                                             'placeholder': 'Your City Name here ..',
                                             'class': 'form-control'})
                                         )
-    state    = forms.CharField(max_length=15, label="State", required=True,
+    state    = forms.CharField(max_length=100, label="State", required=True,
                                         help_text='please enter your State name',
                                         error_messages={
                                             'required': 'reqired State Name'},
@@ -46,7 +46,7 @@ class ShippingAdressForm(forms.ModelForm):
                                             'placeholder': 'Your State Name here ..',
                                             'class': 'form-control'})
                                         )
-    zip_code = forms.CharField(max_length=15, label="Zip Code", required=True,
+    zip_code = forms.CharField(max_length=100, label="Zip Code", required=True,
                                         help_text='please enter your Zip Code',
                                         error_messages={
                                             'required': 'reqired Zip Code'},
@@ -54,7 +54,7 @@ class ShippingAdressForm(forms.ModelForm):
                                             'placeholder': 'Your Zip Code here ..',
                                             'class': 'form-control'})
                                         )
-    street   = forms.CharField(max_length=15, label="Street Name", required=True,
+    street   = forms.CharField(max_length=100, label="Street Name", required=True,
                                         help_text='please enter your Street Name',
                                         error_messages={
                                             'required': 'reqired Street Name'},
@@ -84,7 +84,10 @@ class ShippingAdressForm(forms.ModelForm):
             'phone_no':'Phone Number'
         }
 
-    # to customize ValidationError displayed under the field , for selected field ,city field 
+
+
+    # To customize ValidationError displayed under the field , for selected field ,city field 
+    
     # def clean_city(self):
     #     #cleaned_data = super().clean()
     #     city = self.cleaned_data.get("city")

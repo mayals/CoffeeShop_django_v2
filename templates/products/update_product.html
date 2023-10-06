@@ -13,7 +13,7 @@
     <div class='row  justify-content-center'>
     <div class='mb-5 container col-md-6 offset-md-3'>
         
-        <form method="POST"  enctype="multipart/form-data"   novalidate>
+        <form method="POST"  enctype="multipart/form-data" novalidate>
             {% csrf_token %}
             {{form|crispy}}
 
