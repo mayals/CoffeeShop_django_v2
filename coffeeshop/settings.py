@@ -77,6 +77,15 @@ INSTALLED_APPS = [
 
     # https://pypi.org/project/django-bootstrap4/
     "bootstrap4",
+
+    # https://pypi.org/project/django-countries/
+    "django_countries",
+
+    # https://pypi.org/project/django-forms-bootstrap/
+    'django_forms_bootstrap',
+
+    # https://pypi.org/project/django-widget-tweaks/
+    'widget_tweaks',
 ]
 
 
@@ -145,7 +154,7 @@ DATABASES = {
     #     conn_max_age=600    
     #     )
 }
-print(DATABASES)
+#print(DATABASES)
 
 
 # DATABASES = {

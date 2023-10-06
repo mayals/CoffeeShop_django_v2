@@ -8,14 +8,14 @@ def cart_quant(request):
     if request.user.is_authenticated:
         user = request.user
         order = get_object_or_404(Order,user=user,finish=False)
-        print(order)
+        #print(order)
         orderproducts = OrderProduct.objects.all().filter(order=order)
         que = 0
         for orderproduct in orderproducts :
             que = que + orderproduct.quantity
         items_quant = que
         #items_quant = orderproducts.count()
-        print(items_quant)
+        #print(items_quant)
         return {
             "user":user,
             "order_id" : order.id, 

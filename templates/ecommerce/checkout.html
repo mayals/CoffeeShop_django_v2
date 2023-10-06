@@ -36,14 +36,14 @@
                                 <b>Shipping Address Settings</b>
                             </div>
                             <div class="card-body">
-                                <p class="card-text"><b>Country:</b>country.</p>
-                                <p class="card-text"><b>City:</b> city.</p>
-                                <p class="card-text"><b>Zip Code:</b>  zip_code.</p>
-                                <p class="card-text"><b>Street:</b> street.</p>
-                                <p class="card-text"><b>State:</b> state.</p>
-                                <p class="card-text"><b>Pone Number:</b> PHONE NUMBER.</p>
+                                <p class="card-text"><b>Country:  </b>{{ order.country }}</p>
+                                <p class="card-text"><b>City:  </b>{{ order.city }}</p>
+                                <p class="card-text"><b>Zip Code:  </b>{{ order.zip_code }}</p>
+                                <p class="card-text"><b>Street:  </b>{{ order.street }}</p>
+                                <p class="card-text"><b>State:  </b>{{ order.state }}</p>
+                                <p class="card-text"><b>Pone Number:  </b>{{ order.phone_no }}</p>
                                 <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-sm btn-success ">Edit Address</a>
+                                    <a href="{% url 'ecommerce:editaddress-view' order_id=order.id  %}" class="btn btn-sm btn-success ">Edit Address</a>
                                 </div>
                             </div>
                         </div>

@@ -1,11 +1,15 @@
 from django.db import models
+
 from django.conf import settings
 from django.urls import reverse
 import uuid 
 from products.models import Product
 # https://pypi.org/project/shortuuid/
 from shortuuid.django_fields import ShortUUIDField 
-
+# https://django-phonenumber-field.readthedocs.io/en/latest/#
+from phonenumber_field.modelfields import PhoneNumberField
+# https://pypi.org/project/django-countries/
+from django_countries.fields import CountryField
 
 # CART
 class OrderProduct(models.Model):
@@ -46,12 +50,12 @@ class Order(models.Model):
     order_date     = models.DateTimeField(auto_now_add=True, auto_now=False) 
     finish         = models.BooleanField(default=True, blank=True, null=True)
     
-    city           = models.CharField(max_length=400, default="", blank=False)
-    zip_code       = models.CharField(max_length=100, default="", blank=False)
-    street         = models.CharField(max_length=500, default="", blank=False)
-    state          = models.CharField(max_length=100, default="", blank=False)
-    country        = models.CharField(max_length=100, default="", blank=False)
-    phone_no       = models.CharField(max_length=100, default="", blank=False)
+    country        = CountryField(blank_label="(select country)", multiple=False)    
+    city           = models.CharField(max_length=5, default=" ", blank=False)
+    zip_code       = models.CharField(max_length=5, default=" ", blank=False)
+    state          = models.CharField(max_length=5, default=" ", blank=False)
+    street         = models.CharField(max_length=5, default=" ", blank=False)
+    phone_no       = PhoneNumberField(null=True,default=" ", blank=False)
     
     payment_status = models.CharField(max_length=30, choices=PaymentStatus.choices, default=PaymentStatus.UNPAID)
     payment_mode   = models.CharField(max_length=30, choices=PaymentMode.choices, default=PaymentMode.COD)
@@ -81,7 +85,7 @@ class Order(models.Model):
             quantity = item.quantity
             price_at_order    = item.price_at_order
             product_amount = quantity*price_at_order
-            print(product_amount)
+            #print(product_amount)
             aoo = aoo + int(product_amount)
             self.total_amount = aoo
         return self.total_amount

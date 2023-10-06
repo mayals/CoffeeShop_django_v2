@@ -88,5 +88,5 @@ class UserProfileForm(forms.ModelForm):
         model   = UserProfile
         fields  = ('bio', 'profile_image', 'date_of_birth', 'gender', 'phone_number', 'address', 'city', 'state', 'country')
         widgets = {
-            'date_of_birth': DatePickerInput(options={"format": "MM/DD/YYYY"}),
+            'date_of_birth': DatePickerInput(options={"format": "DD/MM/YYYY"}),
         }

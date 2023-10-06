@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse 
-from .forms import OrderProductCartForm
+from .forms import OrderProductCartForm,ShippingAdressForm
 from .models import Product, OrderProduct, Order 
 
 
@@ -61,37 +61,12 @@ def add_to_cart(request, pro_id):
 
 
 
-    # if request.method == 'POST':
-    #     form = OrderForm(request.POST)       
-    #     if form.is_valid():
-    #         order = form.save(commit = False)
-    #         order.user = request.user
-    #         order.save(commit = False)
-    #         order_id = order.id
-            
-            # orderproducts = OrderProduct.objects.filter(order=order_id)
-            # total_amount = 0
-            # for product in orderproducts :
-            #     quantity = product.quantity
-            #     price    = product.price
-            #     product_amount = quantity*price
-            #     total_amount = total_amount + product_amount
-                
-            # order.total_amount = order.total_amount
-            # order.save(commit = True)
-            
-
-
-    # form = OrderForm() 
-
-    # context = {
-    #    'title' : "Create Order",
-    #    'form'  : form,   
-    # }    
-    # return render(request,'ecommerce/create_order.html', context)
+ 
 
 
 
+
+########################################## cart_view ######################################################
 @login_required(login_url='users:signin')
 def cart_view(request,order_id):
     order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
@@ -105,7 +80,6 @@ def cart_view(request,order_id):
         'form'         : add_to_cart_form,
     }    
     return render(request,'ecommerce/cart.html', context)
-
 
 
 
@@ -145,19 +119,76 @@ def delete_orderproduct(request,order_id,item_id):
 
 
 
+
+
+########################################## checkout_view ######################################################
 @login_required(login_url='users:signin')
 def checkout_view(request,order_id):
     order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
     orderproducts = OrderProduct.objects.all().filter(order=order)
-    #shipping_address_form = ShippingAdressForm()
+    
 
     context = {
         'title'         : 'Checkout Page', 
         'order'         : order,
         'orderproducts' : orderproducts,
-        #'form'          : shipping_address_form ,
     }    
     return render(request,'ecommerce/checkout.html', context)
+
+
+
+########################################## edit shipping address ######################################################
+@login_required(login_url='users:signin')
+def editaddress_view(request,order_id):
+    order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
+    form = ShippingAdressForm(instance = order)  
+    if request.method == 'POST':
+        form = ShippingAdressForm(request.POST,instance=order)
+        print(form)
+        if form.is_valid():
+            u_order= form.save(commit = True)
+            
+            # this fields values no change only given from instance order(constant values for  current order) 
+            u_order.id =  order.id
+            u_order.user = order.user
+            u_order.total_amount = order.total_amount
+            u_order.order_date = order.order_date
+            u_order.finish = False
+            # get values of many to many field, orderproducts list for current order
+            listorderproducts = OrderProduct.objects.filter(order=order)
+            u_order.orderproducts.set(listorderproducts) # use set() with many to many
+
+            # edit Shipping Adress (updated value) -- new value insert by user
+            u_order.country = form.cleaned_data.get("country")
+            u_order.city = form.cleaned_data.get("city")
+            u_order.zip_code = form.cleaned_data.get("zip_code")
+            u_order.state = form.cleaned_data.get("state")
+            u_order.street = form.cleaned_data.get("street")
+            u_order.phone_no = form.cleaned_data.get("phone_no")
+            u_order.save()
+            messages.success(request, f'thanks ( {request.user.first_name} ),Edit done successfully !')
+            return redirect('ecommerce:checkout-view', order_id = order.id )
+        
+        else:
+            messages.warning(request,f'shipping address of {request.user.first_name} Not updated !')
+            form = ShippingAdressForm(instance=order)   
+    
+    context = {
+        'title'         : 'Edit Address Page', 
+        'order'         : order,
+        'form'          : form ,    
+    }    
+    return render(request,'ecommerce/edit_address.html', context)
+
+
+        
+
+    
+
+
+
+
+
 
 
 
@@ -213,3 +244,38 @@ def checkout_view(request,order_id):
 #         orderproduct.save()
 #         messages.success(request,f'(The product {product_name} ) quantity update successfully!')
 #         return HttpResponseRedirect(reverse('ecommerce:cart-view')
+
+
+
+
+
+
+
+   # if request.method == 'POST':
+    #     form = OrderForm(request.POST)       
+    #     if form.is_valid():
+    #         order = form.save(commit = False)
+    #         order.user = request.user
+    #         order.save(commit = False)
+    #         order_id = order.id
+            
+            # orderproducts = OrderProduct.objects.filter(order=order_id)
+            # total_amount = 0
+            # for product in orderproducts :
+            #     quantity = product.quantity
+            #     price    = product.price
+            #     product_amount = quantity*price
+            #     total_amount = total_amount + product_amount
+                
+            # order.total_amount = order.total_amount
+            # order.save(commit = True)
+            
+
+
+    # form = OrderForm() 
+
+    # context = {
+    #    'title' : "Create Order",
+    #    'form'  : form,   
+    # }    
+    # return render(request,'ecommerce/create_order.html', context)

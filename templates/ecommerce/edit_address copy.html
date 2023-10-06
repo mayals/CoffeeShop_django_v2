@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% include 'includes/messages.html' %}
+
+
+<div class="container-fluid">
+    <h3 class="mt-4">{{title|title}}</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">{{sub_title|title}}</li>
+    </ol>
+
+    <div class='row  justify-content-center'>
+    <div class='mb-5 container col-md-6 offset-md-3'>
+        
+        <form method="POST"  enctype="multipart/form-data"   novalidate>
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                    {% if field.help_text %}
+                        <p class="help" id="{{ field.id_for_label }}_helptext">
+                        {{ field.help_text|safe }}
+                        </p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <div class='btn-group'>
+                <button type="submit" class="btn btn-info">Edit Address</button>
+            </div>
+        </form>
+
+    </div>
+    </div>
+
+</div>
+{% endblock content %}

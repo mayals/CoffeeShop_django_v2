@@ -115,6 +115,11 @@ class UserProfile(models.Model):
     
     class Meta:
         verbose_name_plural = 'User Profiles'
+        # widgets = {
+        #         # specify date-frmat
+        #         ' date_of_birth': DatePickerInput(format='%Y-%m-%d'),
+        #     }
+
 
     def __str__(self):
         return self.user.email
