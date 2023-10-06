@@ -141,10 +141,10 @@ def checkout_view(request,order_id):
 @login_required(login_url='users:signin')
 def editaddress_view(request,order_id):
     order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
-    form = ShippingAdressForm(instance = order)  
+    form = ShippingAdressForm(instance = order)
     if request.method == 'POST':
         form = ShippingAdressForm(request.POST,instance=order)
-        print(form)
+        #print(form)
         if form.is_valid():
             u_order= form.save(commit = True)
             
@@ -168,15 +168,15 @@ def editaddress_view(request,order_id):
             u_order.save()
             messages.success(request, f'thanks ( {request.user.first_name} ),Edit done successfully !')
             return redirect('ecommerce:checkout-view', order_id = order.id )
-        
+
         else:
             messages.warning(request,f'shipping address of {request.user.first_name} Not updated !')
-            form = ShippingAdressForm(instance=order)   
+            form = ShippingAdressForm(request.POST,instance=order)   
     
     context = {
-        'title'         : 'Edit Address Page', 
-        'order'         : order,
-        'form'          : form ,    
+        'title'   :'Edit Address Page', 
+        'order'   : order,
+        'form'    : form ,    
     }    
     return render(request,'ecommerce/edit_address.html', context)
 

@@ -84,5 +84,15 @@ class ShippingAdressForm(forms.ModelForm):
             'phone_no':'Phone Number'
         }
 
+    # to customize ValidationError displayed under the field , for selected field ,city field 
+    # def clean_city(self):
+    #     #cleaned_data = super().clean()
+    #     city = self.cleaned_data.get("city")
+    #     print(city)
+    #     # city = self.cleaned_data.get("city")
 
+    #     if len(city) > 5 :
+    #         raise forms.ValidationError("city must be 5 length")
+    #     return city
     
+        

@@ -51,10 +51,10 @@ class Order(models.Model):
     finish         = models.BooleanField(default=True, blank=True, null=True)
     
     country        = CountryField(blank_label="(select country)", multiple=False)    
-    city           = models.CharField(max_length=5, default=" ", blank=False)
-    zip_code       = models.CharField(max_length=5, default=" ", blank=False)
-    state          = models.CharField(max_length=5, default=" ", blank=False)
-    street         = models.CharField(max_length=5, default=" ", blank=False)
+    city           = models.CharField(max_length=100, default=" ", blank=False)
+    zip_code       = models.CharField(max_length=100, default=" ", blank=False)
+    state          = models.CharField(max_length=100, default=" ", blank=False)
+    street         = models.CharField(max_length=100, default=" ", blank=False)
     phone_no       = PhoneNumberField(null=True,default=" ", blank=False)
     
     payment_status = models.CharField(max_length=30, choices=PaymentStatus.choices, default=PaymentStatus.UNPAID)
