@@ -545,7 +545,7 @@ ul.messagelist li.error {
     font-weight: 700;
     display: block;
     padding: 10px 12px;
-    margin: 0 0 10px 0;
+    margin: 0 0 0px 0;
     color: #ba2121;
     border: 1px solid #ba2121;
     border-radius: 4px;
@@ -554,7 +554,7 @@ ul.messagelist li.error {
 }
 
 ul.errorlist {
-    margin: 0 0 4px;
+    margin: 0 0 0px;
     padding: 0;
     color: #ba2121;
     background: #fff;
@@ -563,7 +563,7 @@ ul.errorlist {
 ul.errorlist li {
     font-size: 13px;
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 0px;
 }
 
 ul.errorlist li:first-child {
@@ -964,3 +964,5 @@ table#change-history tbody th {
 .popup #header {
     padding: 10px 20px;
 }
+
+
