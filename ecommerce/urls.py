@@ -11,5 +11,8 @@ urlpatterns = [
    
     path('checkout_view/<str:order_id>/',views.checkout_view, name='checkout-view'),
     path('editaddress_view/<str:order_id>/',views.editaddress_view, name='editaddress-view'),
+    path('paymentmode/<str:order_id>/',views.add_payment_mode, name='add_payment_mode'),
+
+    
     # path('update_cart/<int:pro_id>/',views.update_cart_form_view, name='update-cart-form-view'),
 ]

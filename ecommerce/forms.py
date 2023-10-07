@@ -84,8 +84,6 @@ class ShippingAdressForm(forms.ModelForm):
             'phone_no':'Phone Number'
         }
 
-
-
     # To customize ValidationError displayed under the field , for selected field ,city field 
     
     # def clean_city(self):
@@ -99,3 +97,16 @@ class ShippingAdressForm(forms.ModelForm):
     #     return city
     
         
+
+
+
+##########################################  ADD PAYMENT MODE FORM ############################################333
+CHOICES=[('COD','COD'), 
+         ('CARD','CARD') 
+]
+class PaymentModeForm(forms.ModelForm):
+    payment_mode = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect())
+
+    class Meta:
+        model = Order
+        fields = ['payment_mode']      

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse 
-from .forms import OrderProductCartForm,ShippingAdressForm
+from .forms import OrderProductCartForm, ShippingAdressForm, PaymentModeForm
 from .models import Product, OrderProduct, Order 
 
 
@@ -126,12 +126,13 @@ def delete_orderproduct(request,order_id,item_id):
 def checkout_view(request,order_id):
     order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
     orderproducts = OrderProduct.objects.all().filter(order=order)
-    
+    form = PaymentModeForm()
 
     context = {
         'title'         : 'Checkout Page', 
         'order'         : order,
         'orderproducts' : orderproducts,
+        'form'          : form
     }    
     return render(request,'ecommerce/checkout.html', context)
 
@@ -182,9 +183,37 @@ def editaddress_view(request,order_id):
 
 
         
+########################################## Add Payment Mode ######################################################
+@login_required(login_url='users:signin')
+def add_payment_mode(request,order_id):
+    print('hello')
+    order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
+    print("order=" + str(order))
 
-    
 
+    if request.method == 'POST':
+        form= PaymentModeForm(request.POST)
+        if form.is_valid():
+            payment_mode = request.POST.get('payment_mode')
+            print(payment_mode)
+            if payment_mode == 'CARD' :
+                order.payment_mode = 'CARD'
+                order.save()
+                messages.success(request, f'successfully choise Card payment mode')
+                return redirect('ecommerce:cart-view', order_id=order_id)
+            
+            if payment_mode == 'COD' :
+                order.payment_mode = 'COD'
+                order.save()
+                messages.success(request, f'successfully choise Cash on delevry payment mode')
+                return redirect('ecommerce:checkout-view', order_id=order_id)
+
+    # context = {
+    #     'title'   :'add payment mode page', 
+    #     'order'   : order,
+    #     'form'    : form ,    
+    # }    
+    # return render(request,'ecommerce/checkout.html', context)
 
 
 

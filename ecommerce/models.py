@@ -71,6 +71,7 @@ class Order(models.Model):
         ordering = ('order_date',)
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
+        
     
     @property
     def orderproducts(self):
