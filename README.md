@@ -93,8 +93,7 @@ By following this project outline, you can create a functional CoffeeShop Django
 
 
 ## ER Diagram:
-![ER_coffeeshop](https://github.com/mayals/CoffeeShop_django_v2/assets/48769543/464c1151-fe44-4b9f-9c00-219845108f3a)
-
+![Coffeeshop_dbdiagram](https://github.com/mayals/CoffeeShop_django_v2/assets/48769543/15f0389e-011b-4676-b276-a001aed6de95)
 
 https://dbdiagram.io/d/Coffeeshop-6505b34302bd1c4a5eb1811a
 
