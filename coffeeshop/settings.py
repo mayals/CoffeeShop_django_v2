@@ -54,8 +54,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'ecommerce.apps.EcommerceConfig',
     # Third party apps
-    # https://django-hitcount.readthedocs.io/en/latest/installation.html
-    "hitcount",
+    
     # https://django-phonenumber-field.readthedocs.io/en/latest/
     "phonenumber_field",
     # https://pypi.org/project/django-crispy-forms/
@@ -86,6 +85,9 @@ INSTALLED_APPS = [
 
     # https://pypi.org/project/django-widget-tweaks/
     'widget_tweaks',
+
+    # https://django-hitcount.readthedocs.io/en/latest/installation.html
+    "hitcount",
 ]
 
 
@@ -258,3 +260,8 @@ DJANGO_REST_MULTITOKENAUTH_REQUIRE_USABLE_PASSWORD = True
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
+
+
+####################################### STRIPE_SECRET SETTINGS ##############################################
+# https://dashboard.stripe.com/test/apikeys
+STRIPE_SECRET = os.getenv('STRIPE_SECRET')

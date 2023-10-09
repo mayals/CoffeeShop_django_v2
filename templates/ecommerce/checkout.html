@@ -47,7 +47,7 @@
                                 <p class="card-text"><b>State:  </b>{{ order.state }}</p>
                                
                                 <div class="d-flex justify-content-end">
-                                    <a href="{% url 'ecommerce:editaddress-view' order_id=order.id  %}" class="btn btn-sm btn-success">Edit Address</a>
+                                    <a href="{% url 'ecommerce:editaddress-view' order_id=order.id  %}" class="btn btn-sm btn-secondary">Edit Address</a>
                                 </div>
                             </div>
                         </div>
@@ -70,11 +70,11 @@
                                 <div class="row row-cols-1 row-cols-md-2">
                                     <div class="col mb-5">
                                         <div class="text-center">
-                                            <img src="{% static 'img/card_payment.png' %}"  width="100px" height="100px" alt="card payment mode">
+                                            <img src="{% static 'img/card_payment.png' %}"  width="100px" height="100px" alt="CARD payment mode">
                                         </div>
                                         <div class="text-center">
                                             <div class="form-check  pt-2">
-                                                <input class="form-check-input" type="radio" name="payment_mode" value="CARD"  id="exampleRadios1"  checked>
+                                                <input class="form-check-input" type="radio" name="payment_mode" value="CARD"  id="exampleRadios1">
                                                 <label class="form-check-label" for="exampleRadios1">
                                                   Card Payment ( CARD )
                                                 </label>
@@ -83,7 +83,7 @@
                                     </div>
                                     <div class="col mb-3">
                                         <div class="text-center">
-                                            <img src="{% static 'img/cash_payment.png' %}" width="100px" height="100px" alt="...">
+                                            <img src="{% static 'img/cash_payment.png' %}" width="100px" height="100px" alt="COD payment mode">
                                         </div>
                                         <div class="text-center">
                                             <div class="form-check  pt-2">
@@ -97,16 +97,21 @@
                                 </div>
 
                                 <div class='text-center mt-5' >
-                                    <button type="submit" class="btn btn-sm btn-info">Add Payment Mode</button>
+                                    <button type="submit" class="btn btn-sm btn-secondary">Add Payment Mode</button>
                                 </div>
                             </form>   
                             </div>
                         </div>
+                        <div class='text-right mt-5 mb-5' >
+                            <button type="submit" class="btn btn-success">Continue To place order</button>
+                        </div>
                     </div>   
+                   
                 </div>
 
+                
         </div>
     </div>
-
+    
 </div>
 {% endblock content %}

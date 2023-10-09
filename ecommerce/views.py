@@ -145,6 +145,9 @@ def editaddress_view(request,order_id):
     form = ShippingAdressForm(instance = order)
     if request.method == 'POST':
         form = ShippingAdressForm(request.POST,instance=order)
+        request.session["is_address_done"] = False
+        print(request.session["is_address_done"])
+
         #print(form)
         if form.is_valid():
             u_order= form.save(commit = True)
@@ -168,10 +171,17 @@ def editaddress_view(request,order_id):
             u_order.phone_no = form.cleaned_data.get("phone_no")
             u_order.save()
             messages.success(request, f'thanks ( {request.user.first_name} ),Edit done successfully !')
+            
+            # is_address_done = request.session.get("is_address_done", True)
+            request.session["is_address_done"] = True
+            print(request.session["is_address_done"])
             return redirect('ecommerce:checkout-view', order_id = order.id )
 
         else:
             messages.warning(request,f'shipping address of {request.user.first_name} Not updated !')
+            # is_address_done = request.session.get("is_address_done", False)
+            request.session["is_address_done"] = False
+            print(request.session["is_address_done"])
             form = ShippingAdressForm(request.POST,instance=order)   
     
     context = {
@@ -186,34 +196,36 @@ def editaddress_view(request,order_id):
 ########################################## Add Payment Mode ######################################################
 @login_required(login_url='users:signin')
 def add_payment_mode(request,order_id):
-    print('hello')
+    #print('hello')
     order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
-    print("order=" + str(order))
-
-
+    instance = order.payment_mode
+    form= PaymentModeForm(instance)
+    #print("order=" + str(order))
     if request.method == 'POST':
-        form= PaymentModeForm(request.POST)
+        form= PaymentModeForm(request.POST,instance)
+        request.session["is_payment_mode_choosin"] = False
         if form.is_valid():
             payment_mode = request.POST.get('payment_mode')
-            print(payment_mode)
+            #print(payment_mode)
             if payment_mode == 'CARD' :
                 order.payment_mode = 'CARD'
                 order.save()
                 messages.success(request, f'successfully choise Card payment mode')
-                return redirect('ecommerce:cart-view', order_id=order_id)
+                request.session["is_payment_mode_choosin"] = True
+                print(request.session["is_payment_mode_choosin"])
+                return redirect('ecommerce:checkout-view', order_id=order_id)
             
             if payment_mode == 'COD' :
                 order.payment_mode = 'COD'
                 order.save()
                 messages.success(request, f'successfully choise Cash on delevry payment mode')
+                request.session["is_payment_mode_choosin"] = True
+                print(request.session["is_payment_mode_choosin"])
                 return redirect('ecommerce:checkout-view', order_id=order_id)
 
-    # context = {
-    #     'title'   :'add payment mode page', 
-    #     'order'   : order,
-    #     'form'    : form ,    
-    # }    
-    # return render(request,'ecommerce/checkout.html', context)
+    context ={
+            
+    }
 
 
 
