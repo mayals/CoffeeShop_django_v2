@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -8,8 +9,8 @@ from .models import Product, OrderProduct, Order
 # stripe 
 from django.conf import settings
 from django.views import generic
-
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 ########################################## add_to_cart & create order ######################################################
 @login_required(login_url='users:signin')
@@ -248,7 +249,6 @@ class CreateCheckoutSessionView(generic.View):
         # https://stripe.com/docs/checkout/quickstart?lang=python
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
-            
             line_items=[
                 {
                     "price_data": {
@@ -275,9 +275,6 @@ class CreateCheckoutSessionView(generic.View):
         return redirect(checkout_session.url, code=303)
 
 
-
-
-
 def payment_success(request):
     context = {
        'payment_status' :'Paid',   
@@ -285,12 +282,98 @@ def payment_success(request):
     return render(request,'ecommerce/payment_confirmation.html', context)
 
 
-
 def payment_cancel(request):
     context = {
        'payment_status' :'UNPAID',   
     }    
     return render(request,'ecommerce/payment_confirmation.html', context)
+
+
+# flow these steps in these tutorials:
+# https://www.youtube.com/watch?v=66joNBEyNwE
+#  -https://stripe.com/docs/checkout/quickstart
+# 0-https://stripe.com/docs/payments/checkout/fulfill-orders
+# 1- https://stripe.com/docs/payments/checkout/fulfill-orders#install-stripe-cli
+# 2- https://stripe.com/docs/payments/checkout/fulfill-orders#create-event-handler
+# 3- https://stripe.com/docs/payments/checkout/fulfill-orders#testing-webhooks
+# To test in command line i use this url:
+#  stripe listen --forward-to localhost:8000/ecommerce/stripe/my_webhook/
+# this only for test , then change with the next codes (step4...).
+# @csrf_exempt
+# def my_webhook_view(request):
+#   stripe.api_key = settings.STRIPE_SECRET_KEY
+#   payload = request.body
+#   # For now, you only need to print out the webhook payload so you can see
+#   # the structure.
+#   print(payload)
+#   return HttpResponse(status=200)
+
+# 4 -https://stripe.com/docs/payments/checkout/fulfill-orders#verify-events-came-from-stripe
+# Set your secret key. Remember to switch to your live secret key in production.
+# See your keys here: https://dashboard.stripe.com/apikeys
+
+# Set your secret key. Remember to switch to your live secret key in production.
+# See your keys here: https://dashboard.stripe.com/apikeys
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+# You can find your endpoint's secret in your webhook settings
+endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+
+@csrf_exempt
+def my_webhook_view(request):
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+
+        # Check if the order is already paid (for example, from a card payment)
+        # A delayed notification payment will have an `unpaid` status, as
+        # you're still waiting for funds to be transferred from the customer's
+        # account.
+        if session.payment_status == "paid":
+            # Fulfill the purchase
+            line_item = session.list_line_items(session.id,limit=1).data[0]
+            order_id = line_item['name']
+            fulfill_order(order_id) # stripe run function to deal with orde model object
+    # Passed signature verification
+    return HttpResponse(status=200)
+
+
+
+def fulfill_order(order_id):
+    order = Order.objects.get(id=order_id)
+    order.finish = True
+    order.order_date = datetime.datetime.now()
+    order.save()
+
+    #for item in order.orderproducts.all():
+   
+        
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

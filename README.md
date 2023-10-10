@@ -107,6 +107,6 @@ To run CoffeeShop project locally, follow these steps:
 5.  Go to .settings.DATABASES section, deactivate #PRODUCTION mode and activate #Development mode, add PostgreSQL configuration to 
     connect to your database to be the default database.
 6.  Change `.env.templates` to .env and setup you environment variables. 
-7.  Set up the database: `python manage.py migrate`
-8.  Create a superuser account: `python manage.py createsuperuser`
-9.  Start the development server: `python manage.py runserver`
+7.  Set up the database: `python3 manage.py migrate`
+8.  Create a superuser account: `python3 manage.py createsuperuser`
+9.  Start the development server: `python3 manage.py runserver`

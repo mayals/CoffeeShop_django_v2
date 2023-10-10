@@ -15,10 +15,10 @@ urlpatterns = [
 
     # stripe
     # https://stripe.com/docs/checkout/quickstart?lang=python
-    path('create_checkout_session/<str:order_id>/',views.CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
-    path('payment_success/',views.payment_success, name='payment-success'),
-    path('payment_cancel/',views.payment_cancel, name='payment-cancel'),
-    
+    path('stripe/create_checkout_session/<str:order_id>/',views.CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
+    path('stripe/payment_success/',views.payment_success, name='payment-success'),
+    path('stripe/payment_cancel/',views.payment_cancel, name='payment-cancel'),
+    path('stripe/my_webhook/', views.my_webhook_view, name='my_webhook')
     
     # path('update_cart/<int:pro_id>/',views.update_cart_form_view, name='update-cart-form-view'),
 ]
