@@ -19,7 +19,8 @@ def cart_quant(request):
         return {
             "user":user,
             "order_id" : order.id, 
-            "items_quant" : items_quant, 
+            "items_quant" : items_quant,
+             
 
         }
     

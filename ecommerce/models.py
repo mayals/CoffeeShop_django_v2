@@ -78,7 +78,7 @@ class Order(models.Model):
         orderproducts = OrderProduct.objects.all().filter(order = self)
         return orderproducts
     
-    # @property
+    @property
     def total_amount(self):
         orderproducts = OrderProduct.objects.filter(order=self)
         aoo = 0
@@ -88,6 +88,6 @@ class Order(models.Model):
             product_amount = quantity*price_at_order
             #print(product_amount)
             aoo = aoo + int(product_amount)
-            self.total_amount = aoo
-        return self.total_amount
+        total_amount = aoo
+        return total_amount
         

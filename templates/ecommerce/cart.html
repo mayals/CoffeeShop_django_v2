@@ -95,11 +95,11 @@
 
     <section>
         <div class="row my-5 d-flex justify-content-between">
-            <a  href="{% url 'products:products' %}" class="btn btn-secondary">
-                Continue Shopping
+            <a  href="{% url 'products:products' %}" class="btn btn-light">
+                <i class="fa-solid fa-arrow-left"></i>   Back to Shopping
             </a>
-            <a  href="{%  url 'ecommerce:checkout-view'  order_id=order.id  %}" class="btn btn-secondary">
-                Checkout
+            <a  href="{%  url 'ecommerce:checkout-view'  order_id=order.id  %}" class="btn btn-success">
+                Continue to Checkout  <i class="fa-solid fa-arrow-right"></i>
             </a>
         </div>
     </section>

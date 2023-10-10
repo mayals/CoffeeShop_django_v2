@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
+{% include 'includes/messages.html' %}
+
+    {% if payment_status == PAID %}
+       <h3>thanks for payment<h3>
+    {% else %}
+       <h3>payment not done !!<h3>  
+    {% endif %}
+
+
+
+{% endblock %}

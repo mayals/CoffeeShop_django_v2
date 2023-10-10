@@ -13,6 +13,12 @@ urlpatterns = [
     path('editaddress_view/<str:order_id>/',views.editaddress_view, name='editaddress-view'),
     path('paymentmode/<str:order_id>/',views.add_payment_mode, name='add_payment_mode'),
 
+    # stripe
+    # https://stripe.com/docs/checkout/quickstart?lang=python
+    path('create_checkout_session/<str:order_id>/',views.CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
+    path('payment_success/',views.payment_success, name='payment-success'),
+    path('payment_cancel/',views.payment_cancel, name='payment-cancel'),
+    
     
     # path('update_cart/<int:pro_id>/',views.update_cart_form_view, name='update-cart-form-view'),
 ]

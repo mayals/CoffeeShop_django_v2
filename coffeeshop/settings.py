@@ -264,4 +264,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 ####################################### STRIPE_SECRET SETTINGS ##############################################
 # https://dashboard.stripe.com/test/apikeys
-STRIPE_SECRET = os.getenv('STRIPE_SECRET')
+
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+
+

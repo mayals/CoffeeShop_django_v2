@@ -5,6 +5,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse 
 from .forms import OrderProductCartForm, ShippingAdressForm, PaymentModeForm
 from .models import Product, OrderProduct, Order 
+# stripe 
+from django.conf import settings
+from django.views import generic
+
 
 
 ########################################## add_to_cart & create order ######################################################
@@ -98,13 +102,12 @@ def increase_quality(request,order_id,item_id):
 def decrease_quality(request,order_id,item_id):
     order = get_object_or_404(Order,id=order_id,finish=False) 
     item = get_object_or_404(OrderProduct,order=order,id=item_id)
-    if item.quantity > 0 :
+    if item.quantity > 1 :
         item.quantity = item.quantity - 1
         item.save()
         item.product_amount = item.quantity * item.price_at_order
         item.save()
-    else:
-        item.quantity = 0 
+    elif  item.quantity <= 1  :
         item.delete() 
     return redirect('ecommerce:cart-view', order_id=order_id)
 
@@ -211,27 +214,119 @@ def add_payment_mode(request,order_id):
                 order.payment_mode = 'CARD'
                 order.save()
                 messages.success(request, f'successfully choise Card payment mode')
-                request.session["is_payment_mode_choosin"] = True
-                print(request.session["is_payment_mode_choosin"])
+                # request.session["is_payment_mode_choosin"] = True
+                # print(request.session["is_payment_mode_choosin"])
                 return redirect('ecommerce:checkout-view', order_id=order_id)
             
             if payment_mode == 'COD' :
                 order.payment_mode = 'COD'
                 order.save()
                 messages.success(request, f'successfully choise Cash on delevry payment mode')
-                request.session["is_payment_mode_choosin"] = True
-                print(request.session["is_payment_mode_choosin"])
+                # request.session["is_payment_mode_choosin"] = True
+                # print(request.session["is_payment_mode_choosin"])
                 return redirect('ecommerce:checkout-view', order_id=order_id)
 
-    context ={
+
+
+
+########################################## Stripe --  card payment ######################################################
+# Stripe 
+# https://testdriven.io/blog/django-stripe-tutorial/
+# https://stripe.com/docs/checkout/quickstart?lang=python
+# https://www.youtube.com/watch?v=66joNBEyNwE&list=PLPBQbsFiKpUwLTUNI37AYk5gEbsUqIpJI&index=26&t=1324s 
+import stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class CreateCheckoutSessionView(generic.View):
+    def post(self,*args,**kwargs):
+        order = Order.objects.get(id=self.kwargs['order_id'])
+        print(order)
+        ordertotalamount = order.total_amount
+        print(ordertotalamount)
+        host = self.request.get_host()
+
+        # https://stripe.com/docs/checkout/quickstart?lang=python
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
             
-    }
+            line_items=[
+                {
+                    "price_data": {
+                        # Stripe uses cents instead of dollars
+                        "unit_amount": int(ordertotalamount) * 100 ,
+                        "currency": "usd",
+                        "product_data": {
+                            "name": order.id,
+                            "description": 'Payment for Coffee Shop - order number '+'#'+ str(order.id)
+                            #"images": [
+                            #    f"{settings.BACKEND_DOMAIN}/{order.product.thumbnail}"
+                            #],
+                        },
+                    },
+                    "quantity": 1,
+                }
+            ],
+            metadata={"product_id": order.id},
+            mode='payment',
+        
+            success_url = "http://{}{}".format(host,reverse('ecommerce:payment-success')),
+            cancel_url  = "http://{}{}".format(host,reverse('ecommerce:payment-cancel')), 
+        )
+        return redirect(checkout_session.url, code=303)
 
 
 
 
 
+def payment_success(request):
+    context = {
+       'payment_status' :'Paid',   
+    }    
+    return render(request,'ecommerce/payment_confirmation.html', context)
 
+
+
+def payment_cancel(request):
+    context = {
+       'payment_status' :'UNPAID',   
+    }    
+    return render(request,'ecommerce/payment_confirmation.html', context)
+
+
+
+
+
+# @csrf_exempt
+# def create_checkout_session(request):
+#     if request.method == 'GET':
+#         domain_url = 'http://localhost:8000/'
+#         stripe.api_key = settings.STRIPE_SECRET_KEY
+#         try:
+#             # Create new Checkout Session for the order
+#             # Other optional params include:
+#             # [billing_address_collection] - to display billing address details on the page
+#             # [customer] - if you have an existing Stripe Customer ID
+#             # [payment_intent_data] - capture the payment later
+#             # [customer_email] - prefill the email input in the form
+#             # For full details see https://stripe.com/docs/api/checkout/sessions/create
+
+#             # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+#             checkout_session = stripe.checkout.Session.create(
+#                 success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
+#                 cancel_url=domain_url + 'cancelled/',
+#                 payment_method_types=['card'],
+#                 mode='payment',
+#                 line_items=[
+#                    {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                   # 'price': '{{PRICE_ID}}',
+                  #  'quantity': 1,
+               # },
+#                 ]
+#             )
+#             return JsonResponse({'sessionId': checkout_session['id']})
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)})
 
 
 
