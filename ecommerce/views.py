@@ -149,10 +149,9 @@ def editaddress_view(request,order_id):
     form = ShippingAdressForm(instance = order)
     if request.method == 'POST':
         form = ShippingAdressForm(request.POST,instance=order)
-        request.session["is_address_done"] = False
-        print(request.session["is_address_done"])
+       
 
-        #print(form)
+     
         if form.is_valid():
             u_order= form.save(commit = True)
             
@@ -175,17 +174,10 @@ def editaddress_view(request,order_id):
             u_order.phone_no = form.cleaned_data.get("phone_no")
             u_order.save()
             messages.success(request, f'thanks ( {request.user.first_name} ),Edit done successfully !')
-            
-            # is_address_done = request.session.get("is_address_done", True)
-            request.session["is_address_done"] = True
-            print(request.session["is_address_done"])
             return redirect('ecommerce:checkout-view', order_id = order.id )
 
         else:
             messages.warning(request,f'shipping address of {request.user.first_name} Not updated !')
-            # is_address_done = request.session.get("is_address_done", False)
-            request.session["is_address_done"] = False
-            print(request.session["is_address_done"])
             form = ShippingAdressForm(request.POST,instance=order)   
     
     context = {
@@ -241,9 +233,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class CreateCheckoutSessionView(generic.View):
     def post(self,*args,**kwargs):
         order = Order.objects.get(id=self.kwargs['order_id'])
-        print(order)
         ordertotalamount = order.total_amount
-        print(ordertotalamount)
         host = self.request.get_host()
 
         # https://stripe.com/docs/checkout/quickstart?lang=python
@@ -284,7 +274,7 @@ def payment_success(request):
 
 def payment_cancel(request):
     context = {
-       'payment_status' :'UNPAID',   
+       'payment_status' :'Unpaid',   
     }    
     return render(request,'ecommerce/payment_confirmation.html', context)
 
@@ -337,17 +327,23 @@ def my_webhook_view(request):
 
     # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
+        print(event['type'])
         session = event['data']['object']
-
+        print('session='+ str(session))
         # Check if the order is already paid (for example, from a card payment)
         # A delayed notification payment will have an `unpaid` status, as
         # you're still waiting for funds to be transferred from the customer's
         # account.
-        if session.payment_status == "paid":
+        if session.payment_status == "paid": 
+            print('session.payment_status == paid')
+
             # Fulfill the purchase
             line_item = session.list_line_items(session.id,limit=1).data[0]
-            order_id = line_item['name']
+            print('line_item='+ str(line_item))
+            order_id = line_item['description']
+            print('order_id='+str(line_item['description']))
             fulfill_order(order_id) # stripe run function to deal with orde model object
+            print('fulfill done :)')
     # Passed signature verification
     return HttpResponse(status=200)
 

@@ -104,24 +104,16 @@ class ProductDetailView(HitCountDetailView):
 
         # Add in a QuerySet of all the books
         if self.request.user.is_authenticated:
-            print(self.request.user.is_authenticated)
             context["title"]   = 'Product Page',
-            print(context["title"])
             context["form"]    = OrderProductCartForm()
-            print(context["form"])
             context["reviews"] = Review.objects.filter(product=self.get_object())
-            print(context["reviews"])
             context["like"]  = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
-            print(context["like"])
             context["order"] = get_object_or_404(Order,user=self.request.user,finish=False) 
-            print(context["order"])
-            # print(context)
             return context
         else:
             context["title"]   = 'Product Page',
             context["form"]    = OrderProductCartForm() 
             context["reviews"] = Review.objects.all()      
-            # print(context)
             return context
 
 

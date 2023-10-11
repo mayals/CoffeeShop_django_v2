@@ -82,10 +82,7 @@ def signin_view(request):
         form = UserLoginForm(request.POST)
         email    = request.POST['email']  
         password = request.POST['password'] 
-        print(email)
-        print(password)
         user = authenticate(request, email=email, password=password)
-        print(user)
         if user is not None:
             if user.is_active == True & user.is_confirmEmail == True :
                 login(request,user)
