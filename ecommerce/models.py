@@ -21,7 +21,7 @@ class OrderProduct(models.Model):
     product_amount   = models.DecimalField(default=00.00, max_digits=10, decimal_places=2 ,blank=False)   # items price = product item quantity*product item price
     product_name     = models.CharField(max_length=200, default="", blank=True)  
     def __str__(self):
-            return 'order No: #'+str(self.order.id) +'--'+'user email:'+str(self.order.user.email) +'--'+"product:"+str(self.product.name)
+            return 'order No: '+str(self.order.id) +'--'+'user email:'+str(self.order.user.email) +'--'+"product:"+str(self.product.name)
            
 
 
@@ -48,7 +48,7 @@ class Order(models.Model):
     orderproducts  = models.ManyToManyField(Product, through='OrderProduct')
     total_amount   = models.DecimalField(default=00.00, max_digits=10, decimal_places=2 ,blank=False)   # final order price = total items quantity*total items price
     order_date     = models.DateTimeField(auto_now_add=True, auto_now=False) 
-    finish         = models.BooleanField(default=True, blank=True, null=True)
+    finish         = models.BooleanField(default=False, blank=True, null=True)
     
     country        = CountryField(blank_label="(select country)", multiple=False)    
     city           = models.CharField(max_length=100, default=" ", blank=False)
@@ -62,7 +62,7 @@ class Order(models.Model):
     status         = models.CharField(max_length=60, choices=OrderStatus.choices, default=OrderStatus.PROCESSING)
     
     def __str__(self):
-        return f"#{self.id}"
+        return f"{self.id}"
     
     def get_absolute_url(self):
         return reverse('order-detail', kwargs = {'id':self.id}) # view_name='{model_name}-detail'
@@ -79,15 +79,18 @@ class Order(models.Model):
         return orderproducts
     
     @property
-    def total_amount(self):
+    def get_final_amount(self):
         orderproducts = OrderProduct.objects.filter(order=self)
-        aoo = 0
-        for item in orderproducts :
-            quantity = item.quantity
-            price_at_order    = item.price_at_order
-            product_amount = quantity*price_at_order
-            #print(product_amount)
-            aoo = aoo + int(product_amount)
-        total_amount = aoo
-        return total_amount
+        result = 0
+        if orderproducts is not None:  
+
+            for item in orderproducts :
+                quantity = item.quantity
+                price_at_order    = item.price_at_order
+                product_amount = quantity*price_at_order
+                #print(product_amount)
+                result = result + int(product_amount)
+                print(result)
+                return result
         
+        return result

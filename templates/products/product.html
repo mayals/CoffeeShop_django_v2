@@ -74,12 +74,12 @@
                           </div>
 
                       </div>
-                      {% endif %}
+                      {% else %}
                       <!-- end  div of only authenticated   --> 
 
 
                       <!-- start div of  only anonymous see this div --> 
-                      {% if request.user.is_anonymous %}
+                     
                       <div>
                         <!-- add-to-cart form  for anonymous --> 
                         <div class="card-text border rounded border-secondary p-2 my-1">
@@ -99,11 +99,11 @@
                         <!-- Like/Dislike button--> 
                         <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2" data-toggle="tooltip" data-placement="top" title="Need Login to like this product"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
                         <!-- add to fav--> 
-                        <a href="{% url 'products:user-favorites' user_id=request.user.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl fa-folder-plus"></i></a>
+                        <a href="" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl fa-folder-plus"></i></a>
                       </div>
-                      {% endif %}
+                    
                       <!-- end div of  only anonymous  --> 
-
+                    {% endif %}
 
                 </div>
               </div>
@@ -122,7 +122,8 @@
               <h4 class='text-center'>Product Reviews</h4>
             </div>
             <div class="card-body">
-                {% for review in reviews %}  
+                {% for review in reviews %}
+                {{review.rating_value }}  
                   <div class="media mb-3">
                     <div class="mr-2"> {{  review.user.profile_image }}
                       <img width="60" hight="60" class="rounded-circle border img-thumbnail" src="{{  review.user.get_user_profile.profile_image.url }}">

@@ -10,6 +10,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse
 from coffeeshop.settings import DEFAULT_FROM_EMAIL
 from .models import UserModel, SMSCode, UserProfile
+from ecommerce.models import Order
 # https://pypi.org/project/django-rest-passwordreset/
 # https://github.com/anexia-it/django-rest-passwordreset/blob/master/README.md#example-for-sending-an-e-mail
 # from django_rest_passwordreset.signals import reset_password_token_created      
@@ -71,12 +72,23 @@ def create_user_profile(sender, instance, created, **kwargs):
 #signal-3
 # sender   =   get_user_model()                -------- from django.contrib.auth import get_user_model
 # receiver =  post_save_generate_code          -------- to creat new OTP code in database table for the new registerd user 
-@receiver(post_save, sender=get_user_model())
+@receiver(post_save, sender=UserModel)
 def post_save_generate_code(sender, instance, created, *args, **kwargs):
     if created:
             SMSCode.objects.create(user=instance)
 
 
+
+
+
+
+#signal-4
+# sender   =   get_user_model()            -------- from django.contrib.auth import get_user_model
+# receiver =   create_order       --------  to creat new order in database table for the new registerd user 
+@receiver(post_save, sender=get_user_model())
+def create_user_neworder(sender, instance, created, **kwargs):
+    if created:
+            Order.objects.create(user=instance)
 
 
 

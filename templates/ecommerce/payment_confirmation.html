@@ -3,7 +3,7 @@
 {% block content %}
 {% include 'includes/messages.html' %}
 
-    {% if payment_status == PAID %}
+    {% if payment_status == 'payment' %}
        <h3>thanks for payment<h3>
     {% else %}
        <h3>payment not done !!<h3>  

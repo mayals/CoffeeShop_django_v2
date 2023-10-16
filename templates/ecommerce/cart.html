@@ -9,8 +9,7 @@
 <div class="p-2 m-1 rounded border border-warning">
 
 
-    <div class="container">
-        <section>
+    <section class="container">
             <h2 class="text-center">Cart</h2>
             <hr>
             <div class="card bg-light mb-3" style="max-width: 18rem;">
@@ -43,7 +42,7 @@
                         </thead>
 
                         <tbody>
-                            {% for item in orderproducts %}
+                            {% for item in orderproducts  %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td><img width="80" height="80" src="{{ item.product.photo.url }}" class="img-thumbnail rounded-lg" alt={{ product.name }}></td>
@@ -89,7 +88,7 @@
 
     <section>
         <h4 class=" text-center">
-            Total Amount: <span class="badge bg-warning">({{ order.total_amount }} $)</span><span class="badge text-bg-secondary">({{items_quant}}) items</span>
+            Total Amount: <span class="badge bg-warning">({{ order.get_final_amount }} $)</span><span class="badge text-bg-secondary">({{items_quant}}) items</span>
         </h4>
     </section>
 
@@ -103,11 +102,6 @@
             </a>
         </div>
     </section>
-
-
-
-
-    </div>
 
 
 </div>

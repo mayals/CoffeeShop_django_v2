@@ -23,7 +23,7 @@
                                 <h6 class="card-title"><span class='font-weight-bold'>Id:</span> {{ order.id }}</h6>
                                 <h6 class="card-title"><span class='font-weight-bold'>Date:</span> {{ order.order_date }}</h6>
                                 <h6 class="card-title"><span class='font-weight-bold'>Owner Name:</span> {{ order.user.get_user_fullname }}</h6>
-                                <h6 class="card-title"><span class='font-weight-bold'>Total Amount:</span><span class="bg-warning"> {{ order.total_amount }}$   for   ({{items_quant}}) items</span></h6>
+                                <h6 class="card-title"><span class='font-weight-bold'>Total Amount:</span><span class="bg-warning"> {{order.get_final_amount }}$   for   ({{items_quant}}) items</span></h6>
                             </div>
                         </div>
                     </div>

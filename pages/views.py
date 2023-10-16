@@ -2,17 +2,17 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth import get_user_model 
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from products.models import Product
-
+from ecommerce.models import Order
 
 def index_view(request):
-   products = Product.objects.all().filter(in_stock=True)
+   products = Product.objects.all().filter(in_stock=True)   
+
    context = {
       'title' : "Index Page",
-      'products' : products ,
-        
+      'products' : products ,       
    }    
    return render(request,'pages/index.html', context)
 
@@ -45,9 +45,12 @@ def coffee_view(request):
 def dashboard_view(request):
    if request.user.is_authenticated and request.user.is_superuser:
       products = Product.objects.all()
-      context = {
-         'products' : products 
-         }
+      if products is None:
+         products = []
+      else:
+         context = {
+            'products' : products 
+            }
       return render(request,'pages/dashboard.html',context)
    
    else:

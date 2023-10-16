@@ -84,7 +84,7 @@
 
              <!-- CART burtton in navbar -->
              {% if request.user.is_authenticated %}
-             <a href="{%  url 'ecommerce:cart-view' order_id=order_id %}" class="btn mr-2">
+             <a href="{% url 'ecommerce:cart-view' order_id=order.id %}" class="btn mr-2">
                <i class="fa-solid fa-cart-shopping fa-lg" style="color: #ffffff;"></i>
                    <span class="badge badge-light">{{items_quant}}</span>
              </a>

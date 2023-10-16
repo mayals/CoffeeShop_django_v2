@@ -89,6 +89,9 @@ def signin_view(request):
                 form = UserLoginForm()
                 messages.success(request,'you do success login.')
                 return redirect('pages:index')
+
+                
+                
                 #return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
         else:
                 form = UserLoginForm()

@@ -19,7 +19,7 @@ def create_product_form_view(request):
    if request.method == 'POST':
       form = CreateProductForm(request.POST, request.FILES)
       if form.is_valid():
-         form.save(commit=True)
+         form.save()
          form = CreateProductForm()
           
          if 'saveandcontinue' in request.POST:
@@ -50,7 +50,7 @@ def products_view(request):
       cs = request.GET['cs']
       if not cs: 
          cs = "off"
-  
+
    # search by name
    if "schname" in request.GET :
       schname = request.GET['schname']
@@ -73,11 +73,12 @@ def products_view(request):
          schprice_to = request.GET['schprice_to']
          if schprice_from.isdigit() and schprice_to.isdigit():
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
-   
+
+  
    context = {
-      'title'    : 'Products Page',
-      'products' :  pro,     
-   }    
+         'title'    : 'Products Page',
+         'products' :  pro,     
+      }    
    return render(request,'products/products.html', context)
 
 
@@ -108,7 +109,8 @@ class ProductDetailView(HitCountDetailView):
             context["form"]    = OrderProductCartForm()
             context["reviews"] = Review.objects.filter(product=self.get_object())
             context["like"]  = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
-            context["order"] = get_object_or_404(Order,user=self.request.user,finish=False) 
+            context["order"] = Order.objects.get(user=self.request.user,finish=False) 
+            print(context['order'])
             return context
         else:
             context["title"]   = 'Product Page',

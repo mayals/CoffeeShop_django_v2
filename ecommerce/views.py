@@ -74,17 +74,25 @@ def add_to_cart(request, pro_id):
 ########################################## cart_view ######################################################
 @login_required(login_url='users:signin')
 def cart_view(request,order_id):
-    order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
-    orderproducts = OrderProduct.objects.all().filter(order=order)
     add_to_cart_form = OrderProductCartForm()
-
+    
+    try:
+        order = Order.objects.get(id=order_id,user=request.user,finish=False) 
+    except (TypeError, ValueError, OverflowError, Order.DoesNotExist):
+        return HttpResponse('order does not exit!')
+   
+   
+    orderproducts = order.orderproducts.all()
+    
     context = {
         'title'        : 'Cart Page', 
         'order'        : order,
         'orderproducts' : orderproducts,
         'form'         : add_to_cart_form,
-    }    
+    }
+    print(order)
     return render(request,'ecommerce/cart.html', context)
+    
 
 
 
@@ -153,12 +161,12 @@ def editaddress_view(request,order_id):
 
      
         if form.is_valid():
-            u_order= form.save(commit = True)
+            u_order= form.save(commit=False)
             
             # this fields values no change only given from instance order(constant values for  current order) 
             u_order.id =  order.id
             u_order.user = order.user
-            u_order.total_amount = order.total_amount
+            u_order.total_amount = order.get_final_amount
             u_order.order_date = order.order_date
             u_order.finish = False
             # get values of many to many field, orderproducts list for current order
@@ -233,7 +241,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class CreateCheckoutSessionView(generic.View):
     def post(self,*args,**kwargs):
         order = Order.objects.get(id=self.kwargs['order_id'])
-        ordertotalamount = order.total_amount
+        ordertotalamount = order.get_final_amount
         host = self.request.get_host()
 
         # https://stripe.com/docs/checkout/quickstart?lang=python
@@ -267,14 +275,14 @@ class CreateCheckoutSessionView(generic.View):
 
 def payment_success(request):
     context = {
-       'payment_status' :'Paid',   
+       'payment_status' :'payment',   
     }    
     return render(request,'ecommerce/payment_confirmation.html', context)
 
 
 def payment_cancel(request):
     context = {
-       'payment_status' :'Unpaid',   
+       'payment_status' :'unpayment',   
     }    
     return render(request,'ecommerce/payment_confirmation.html', context)
 
