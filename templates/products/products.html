@@ -21,11 +21,7 @@
 
             {% for product in products %}
             <div>
-              {% if request.user.is_authenticated and request.user.is_superuser %}
-              <div class="card m-2" style="width: 18rem; height: 32rem;">
-              {% else %} 
-              <div class="card m-2" style="width: 18rem; height: 30rem;">
-              {% endif %} 
+              <div class="card m-2" style="width: 18rem;">
                 <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline">
                   <img src="{{ product.photo.url }}" class="card-img-top" alt={{ product.name}}>
                 </a>
