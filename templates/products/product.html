@@ -121,9 +121,49 @@
             <div class="card-header">
               <h4 class='text-center'>Product Reviews</h4>
             </div>
+
+
             <div class="card-body">
-                {% for review in reviews %}
-                {{review.rating_value }}  
+                   <!-- display review.rating_value as stars -->
+                    {% for review in reviews %}
+                        <div class='ml-5'>
+                          {% if review.rating_value == 5 %}
+                            <span style="font-size:24px; color: #fd4;">
+                              <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                            </span>
+                          {% endif %}  
+                        </div>
+                        <div class='ml-5'>
+                          {% if review.rating_value == 4 %}
+                              <span style="font-size:24px; color: #fd4;">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                              </span>
+                          {% endif %}
+                        </div> 
+                        <div class='ml-5'>
+                          {% if review.rating_value == 3 %}
+                              <span style="font-size:24px; color: #fd4;">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                              </span>
+                          {% endif %}
+                        </div> 
+                        <div class='ml-5'>
+                          {% if review.rating_value == 2 %}
+                              <span style="font-size:24px; color: #fd4;">
+                                <i class="fa fa-star"></i>
+                              </span>
+                          {% endif %}
+                        </div>
+                        <div class='ml-5'>
+                          {% if review.rating_value == 1 %}
+                              <span style="font-size:24px; color: #fd4;">
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                              </span>
+                          {% endif %}
+                        </div> 
+                    <!--  end of display review.rating_value as stars -->
+
+
                   <div class="media mb-3">
                     <div class="mr-2"> {{  review.user.profile_image }}
                       <img width="60" hight="60" class="rounded-circle border img-thumbnail" src="{{  review.user.get_user_profile.profile_image.url }}">
@@ -141,10 +181,14 @@
           </div>
       </div>  
       <!--end review list -->
+     
+     
+      <br><br><br><br>
+
 
       <!-- add your review  -->
       <div class="row myrow my-1"> 
-              <h4 class='text-center my-3'>laeve Reviews</h2>
+              <h5 class='text-left my-3'>laeve Reviews</h5>
                 <!-- add  review  -->
                 <form method='GET' action="{% url 'products:review_rating_product' pro_id=product.id  %}"  class="form-group" novalidate>
                       <!--rating_value-->
@@ -169,7 +213,7 @@
                         <textarea name='rating_text' class="form-control" rows="5" placeholder='your rating text'></textarea>
                       </div>
                       <div class='btn-group'>
-                        <button type="submit"  class="btn btn-sm btn-warning my-2">add</button> 
+                        <button type="submit"  class="btn btn-sm btn-warning my-2">Add Review</button> 
                       </div>
                 </form>
       </div>

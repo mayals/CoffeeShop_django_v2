@@ -110,12 +110,11 @@ class ProductDetailView(HitCountDetailView):
             context["reviews"] = Review.objects.filter(product=self.get_object())
             context["like"]  = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
             context["order"] = Order.objects.get(user=self.request.user,finish=False) 
-            print(context['order'])
             return context
         else:
             context["title"]   = 'Product Page',
             context["form"]    = OrderProductCartForm() 
-            context["reviews"] = Review.objects.all()      
+            context["reviews"] = Review.objects.filter(product=self.get_object())      
             return context
 
 

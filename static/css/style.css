@@ -77,7 +77,7 @@ body{
 }
 
 .btn-warning {
-  background-color: #836c4b;
+  background-color: #e4d4be;
   border-color: #836c4b;
 }
 
@@ -241,10 +241,19 @@ input[type=number]:focus,
   text-decoration: none;
 }
 
+.btn.btn-success:focus {
+  color: #96e6a1dc;
+  /* border-color: #fa0303; */
+  text-decoration: none;
+}
+
+
 
 table td{
   vertical-align: center !important;
 }
+
+
 
 .myrow {
   display: contents;
@@ -254,10 +263,6 @@ table td{
 /* rating stars style  */
 .rating-container{
   width: 400px;
-  background: #1111;
-  padding: 20px 30px;
-  border: 1px solid #444;
-  border-radius: 5px;
   display: flex;
   flex-direction: row-reverse;
   align-items:center; 
@@ -271,7 +276,7 @@ table td{
 
 .rating-container label{
   font-size: 20px;
-  color:#444;
+  color:#c5c3c3;
   padding:10px;
   float:right; 
   transition: all 0.2s ease;
