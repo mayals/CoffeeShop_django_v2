@@ -227,25 +227,29 @@ def user_favorites(request,user_id):
 
 
 
-
+# Add rating value and reating text by authentication user only for the selected product
 @login_required(login_url='users:signin')
 def review_rating_product(request,pro_id):
-   if request.method == 'GET':
-      product = get_object_or_404(Product,id=pro_id)
+   if request.method == 'POST':
+      product = get_object_or_404(Product,id=pro_id,in_stock=True)
       user = request.user
       if Review.objects.filter(product=product,user=user).exists():
          messages.warning(request, f'Sorry({request.user.first_name}) not allowed to add more than one review for each product!')
          return redirect('products:product', pro_id=pro_id)
       else:
-         rating_value = request.GET.get('rating_value')
-         rating_text = request.GET.get('rating_text')
-         review = Review(product=product, user=user, rating_value=rating_value, rating_text=rating_text)
-         review.save()
-         reviews_count = Review.objects.all().count()
-         product.reviews_count = reviews_count
-         product.save()
-         messages.success(request, f'thanks ( {request.user.first_name} ) for adding review !')
-         return redirect('products:product', pro_id=pro_id)
-
+         rating_value = request.POST.get('rating_value')
+         rating_text  = request.POST.get('rating_text')
+         if rating_value is not None :
+            review = Review(product=product, user=user, rating_value=rating_value, rating_text=rating_text)
+            review.save()
+            reviews_count = Review.objects.filter(product=product).count()
+            product.reviews_count = reviews_count
+            product.save()
+            messages.success(request, f'thanks ( {request.user.first_name} ) for adding review !')
+            return redirect('products:product', pro_id=pro_id)
+         else:
+            messages.warning(request,f'(Please choice rating value stars !')
+            return redirect('products:product', pro_id=pro_id)
+   
    messages.warning(request,f'(the review not add !')
    return HttpResponseRedirect(reverse('products:product', args=[pro_id]))

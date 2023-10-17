@@ -124,8 +124,9 @@
             <div class="card-body">
                    <!-- display review.rating_value as stars -->
                     {% for review in reviews %}
+                    {{review.rating_value}}
                         <div class='ml-5'>
-                          {% if review.rating_value == 5 %}
+                          {% if review.rating_value == '5.0' %}
                             <span style="font-size:24px; color: #fd4;">
                               <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
                             </span>
@@ -148,14 +149,14 @@
                         <div class='ml-5'>
                           {% if review.rating_value == 2 %}
                               <span style="font-size:24px; color: #fd4;">
-                                <i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
                               </span>
                           {% endif %}
                         </div>
                         <div class='ml-5'>
                           {% if review.rating_value == 1 %}
                               <span style="font-size:24px; color: #fd4;">
-                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
                               </span>
                           {% endif %}
                         </div> 
@@ -188,9 +189,8 @@
       <div class="row myrow my-1"> 
               <h5 class='text-left my-3'>laeve Reviews</h5>
                 <!-- add  review  -->
-                <form method='POST' action="{% url 'products:review_rating_product' pro_id=product.id  %}"  class="form-group" novalidate>
-                  {% csrf_token %} 
-                  <!--rating_value-->
+                <form method='GET' action="{% url 'products:review_rating_product' pro_id=product.id  %}"  class="form-group" novalidate>
+                      <!--rating_value-->
                       <div class="rating-container my-2">
                         <input  type="radio" name="rating_value" id="star_5" value="5">
                         <label  for="star_5"><i class="fa fa-star"></i></label>

@@ -43,21 +43,33 @@ class Like(models.Model):
     def __str__(self):
         return f"{self.user.get_user_fullname}-{self.product.name}-->{self.like_status}" 
     
+    class Meta:
+        unique_together = ("user", "product")
+        ordering = ["product"]
 
 
 
 
+
+# RATING_VALUE = (
+#         ("1.0", "★☆☆☆☆ (1/5)"),
+#         ("2.0", "★★☆☆☆ (2/5)"),
+#         ("3.0", "★★★☆☆ (3/5)"),
+#         ("4.0", "★★★★☆ (4/5)"),
+#         ("5.0", "★★★★★ (5/5)"),
+# )
 
 class Review(models.Model):
     user         = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="review")
     product      = models.ForeignKey(Product, on_delete=models.CASCADE)
-    rating_value = models.PositiveIntegerField(default=0, validators= [ MinValueValidator(0), MaxValueValidator(5)])
+    rating_value = models.PositiveIntegerField( validators= [ MinValueValidator(1), MaxValueValidator(5)])
+    # rating_value = models.CharField(max_length=3, choices=RATING_VALUE)
     rating_text  = models.TextField(blank=True, null=True)
     created_at   = models.DateTimeField(auto_now_add=True)
     updated_at   = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"Rating by '( {self.user.get_user_fullname} on {self.product.name}"
+        return f"Rating by ({self.user.get_user_fullname}) on ({self.product.name})"
 
     class Meta:
         unique_together = ("user", "product")
