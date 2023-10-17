@@ -97,8 +97,8 @@
                     <!-- vistors views count -->
                     <span><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>&nbsp;&nbsp;
                     <span><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> &nbsp;&nbsp; 
-                   <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-folder-plus"></i></a>
-                 </div>
+                    <span><i class="fa-regular fa-star"></i></span> &nbsp;&nbsp;
+                  </div>
                   {% if request.user.is_authenticated and request.user.is_superuser %}
                   <!-- admin only --> 
                     <div class="text-center">

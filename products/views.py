@@ -42,7 +42,7 @@ def create_product_form_view(request):
    
 
 def products_view(request):
-   pro = Product.objects.all().filter(in_stock=True)
+   pro = Product.objects.filter(in_stock=True)
 
    # search with or without sencitve case 
    cs = None
@@ -92,7 +92,7 @@ from hitcount.views import HitCountDetailView
 
 class ProductDetailView(HitCountDetailView):
    model               =  Product 
-   queryset            =  Product.objects.all()
+   queryset            =  Product.objects.filter(in_stock=True)
    context_object_name = 'product'
    pk_url_kwarg        = 'pro_id'
    template_name       = 'products/product.html'
@@ -101,15 +101,13 @@ class ProductDetailView(HitCountDetailView):
    def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(ProductDetailView, self).get_context_data(**kwargs)
-        
-
         # Add in a QuerySet of all the books
         if self.request.user.is_authenticated:
             context["title"]   = 'Product Page',
             context["form"]    = OrderProductCartForm()
             context["reviews"] = Review.objects.filter(product=self.get_object())
-            context["like"]  = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
-            context["order"] = Order.objects.get(user=self.request.user,finish=False) 
+            context["like"]    = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
+            context["order"]   = Order.objects.get(user=self.request.user,finish=False) 
             return context
         else:
             context["title"]   = 'Product Page',
@@ -124,30 +122,30 @@ class ProductDetailView(HitCountDetailView):
 # NOT USED 
 # function based view
 # not used because django-hitcount(the views counter) not work with function based view
-def product_view(request,pro_id):
-   product = get_object_or_404(Product,id=pro_id)
-   # add to cart buton form for item qulity
-   add_to_cart_form = OrderProductCartForm()
+# def product_view(request,pro_id):
+#    product = get_object_or_404(Product,id=pro_id)
+#    # add to cart buton form for item qulity
+#    add_to_cart_form = OrderProductCartForm()
    
-   # for authenticatin users only
-   if request.user.is_authenticated:
-      req_user = request.user
-      like = Like.objects.filter(user=req_user,product=product).count()
-      order = get_object_or_404(Order,user=req_user,finish=False)
-      context = {
-         'title'   : 'Product Page',
-         'product' :  product,
-         'form'    : add_to_cart_form,
-         'like'    : like,
-         'order'   : order,
-      }
-   else:
-      context = {
-            'title'   : 'Product Page',
-            'product' :  product,
-            'form'    : add_to_cart_form,
-   }    
-   return render(request,'products/product.html', context)
+#    # for authenticatin users only
+#    if request.user.is_authenticated:
+#       req_user = request.user
+#       like = Like.objects.filter(user=req_user,product=product).count()
+#       order = get_object_or_404(Order,user=req_user,finish=False)
+#       context = {
+#          'title'   : 'Product Page',
+#          'product' :  product,
+#          'form'    : add_to_cart_form,
+#          'like'    : like,
+#          'order'   : order,
+#       }
+#    else:
+#       context = {
+#             'title'   : 'Product Page',
+#             'product' :  product,
+#             'form'    : add_to_cart_form,
+#    }    
+#    return render(request,'products/product.html', context)
 
 
 

@@ -56,8 +56,6 @@
                               <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
                               {% endif %}
 
-                              <!-- add to fav  for authenticated user -->                               
-                              <a href="{% url 'products:user-favorites' user_id=request.user.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl fa-folder-plus"></i></a>
                              
                               <!-- hit count for authenticated user -->
                              <span><i class="fa-regular fa-eye fa-xl"></i> {% get_hit_count for product %}</span>

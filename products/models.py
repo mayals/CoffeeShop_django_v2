@@ -15,7 +15,7 @@ class Product(models.Model):
     publish_date   = models.DateTimeField(default=datetime.now)
     likes          = models.IntegerField(default=0)                            
     reviews_count  = models.IntegerField(default=0)
-    average_rating = models.FloatField(default=0)
+    average_rating = models.FloatField(default=0.0)
     
     def __str__(self):
         return self.name
