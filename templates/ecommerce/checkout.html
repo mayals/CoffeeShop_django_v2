@@ -40,8 +40,8 @@
                                 <h4 class="card-title"><span class='font-weight-bold'>Owner Name:</span> {{ order.user.get_user_fullname }}</h6>
                                 <p class="card-text"><b>Phone Number:  </b>{{ order.phone_no }}</p>
                                 <hr>
-                                <p class="card-text"><b>Country:  </b>{{ order.country }}</p>
-                                <p class="card-text"><b>City:  </b>{{ order.city }}</p>
+                                <p class="card-text"><b>Country:  </b> {{ order.country|default_if_none:"nothing"  }}</p>
+                                <p class="card-text"><b>City:  </b>{{ order.city|default_if_none:"nothing"   }}</p>
                                 <p class="card-text"><b>Zip Code:  </b>{{ order.zip_code }}</p>
                                 <p class="card-text"><b>Street:  </b>{{ order.street }}</p>
                                 <p class="card-text"><b>State:  </b>{{ order.state }}</p>

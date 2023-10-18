@@ -60,8 +60,8 @@ class Like(models.Model):
 # )
 
 class Review(models.Model):
-    user         = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="review")
-    product      = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user         = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")
+    product      = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
     rating_value = models.PositiveIntegerField( validators= [ MinValueValidator(1), MaxValueValidator(5)])
     # rating_value = models.CharField(max_length=3, choices=RATING_VALUE)
     rating_text  = models.TextField(blank=True, null=True)

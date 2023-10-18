@@ -12,7 +12,7 @@ def cart_quant(request):
     if request.user.is_authenticated:
         order = Order.objects.all().get(user=request.user,finish=False)
         orderproducts = OrderProduct.objects.all().filter(order=order)
-        print(orderproducts)
+        #print(orderproducts)
         if orderproducts is not None:    
             orderproducts = order.orderproducts.all().filter(order=order)
             que = 0

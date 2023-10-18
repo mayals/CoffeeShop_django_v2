@@ -51,11 +51,11 @@ class Order(models.Model):
     finish         = models.BooleanField(default=False, blank=True, null=True)
     
     country        = CountryField(blank_label="(select country)", multiple=False)    
-    city           = models.CharField(max_length=100, default=" ", blank=False)
-    zip_code       = models.CharField(max_length=100, default=" ", blank=False)
-    state          = models.CharField(max_length=100, default=" ", blank=False)
-    street         = models.CharField(max_length=100, default=" ", blank=False)
-    phone_no       = PhoneNumberField(null=True,default=" ", blank=False)
+    city           = models.CharField(max_length=100,  blank=False)
+    zip_code       = models.CharField(max_length=100,  blank=False)
+    state          = models.CharField(max_length=100,  blank=False)
+    street         = models.CharField(max_length=100,  blank=False)
+    phone_no       = PhoneNumberField(null=True, blank=False)
     
     payment_status = models.CharField(max_length=30, choices=PaymentStatus.choices, default=PaymentStatus.UNPAID)
     payment_mode   = models.CharField(max_length=30, choices=PaymentMode.choices, default=PaymentMode.COD)
@@ -90,7 +90,7 @@ class Order(models.Model):
                 product_amount = quantity*price_at_order
                 #print(product_amount)
                 result = result + int(product_amount)
-                print(result)
+                #print(result)
                 return result
         
         return result

@@ -90,7 +90,7 @@ def cart_view(request,order_id):
         'orderproducts' : orderproducts,
         'form'         : add_to_cart_form,
     }
-    print(order)
+    #print(order)
     return render(request,'ecommerce/cart.html', context)
     
 
@@ -202,32 +202,31 @@ def editaddress_view(request,order_id):
 def add_payment_mode(request,order_id):
     #print('hello')
     order = get_object_or_404(Order,user=request.user,finish=False,id=order_id) 
-    instance = order.payment_mode
-    form= PaymentModeForm(instance)
-    #print("order=" + str(order))
-    if request.method == 'POST':
-        form= PaymentModeForm(request.POST,instance)
-        request.session["is_payment_mode_choosin"] = False
-        if form.is_valid():
-            payment_mode = request.POST.get('payment_mode')
-            #print(payment_mode)
-            if payment_mode == 'CARD' :
-                order.payment_mode = 'CARD'
-                order.save()
-                messages.success(request, f'successfully choise Card payment mode')
-                # request.session["is_payment_mode_choosin"] = True
-                # print(request.session["is_payment_mode_choosin"])
+    if order.country != " " and order.city!= " " and order.zip_code!= " " and order.state!= " " and order.street!= " " and order.phone_no!= " ":
+        instance = order.payment_mode
+        form= PaymentModeForm(instance)
+        #print("order=" + str(order))
+        if request.method == 'POST':
+            form= PaymentModeForm(request.POST,instance)
+            if form.is_valid():
+                payment_mode = request.POST.get('payment_mode')
+                #print(payment_mode)
+                if payment_mode == 'CARD' :
+                    order.payment_mode = 'CARD'
+                    order.save()
+                    messages.success(request, f'successfully choise Card payment mode')
+                
+                if payment_mode == 'COD' :
+                    order.payment_mode = 'COD'
+                    order.save()
+                    messages.success(request, f'successfully choise Cash on delevry payment mode')
+                
                 return redirect('ecommerce:checkout-view', order_id=order_id)
+                
+    else:
+        messages.warning(request,f'shipping address must compleated !')
+        return redirect('ecommerce:checkout-view', order_id=order_id)
             
-            if payment_mode == 'COD' :
-                order.payment_mode = 'COD'
-                order.save()
-                messages.success(request, f'successfully choise Cash on delevry payment mode')
-                # request.session["is_payment_mode_choosin"] = True
-                # print(request.session["is_payment_mode_choosin"])
-                return redirect('ecommerce:checkout-view', order_id=order_id)
-
-
 
 
 ########################################## Stripe --  card payment ######################################################

@@ -20,7 +20,7 @@ def cart_quant(request):
     
 
     orderproducts = OrderProduct.objects.all().filter(order=order)
-    print(orderproducts)
+    #print(orderproducts)
     if orderproducts is not None:    
         orderproducts = order.orderproducts.all().filter(order=order)
         que = 0

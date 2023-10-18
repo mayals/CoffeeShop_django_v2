@@ -1,3 +1,4 @@
+from django.db.models import Count,Avg
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -80,9 +81,13 @@ def products_view(request):
          schprice_to = request.GET['schprice_to']
          if schprice_from.isdigit() and schprice_to.isdigit():
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
+   
+   
+   
    context = {
          'title'    : 'Products Page',
-         'products' :  pro,     
+         'products' :  pro, 
+         
       }    
    return render(request,'products/products.html', context)
 
@@ -103,6 +108,8 @@ class ProductDetailView(HitCountDetailView):
    template_name       = 'products/product.html'
    count_hit           =  True
 
+   
+   
    def get_context_data(self, **kwargs):
          # Call the base implementation first to get a context
          context = super(ProductDetailView, self).get_context_data(**kwargs)
@@ -110,12 +117,14 @@ class ProductDetailView(HitCountDetailView):
          context["form"]    = OrderProductCartForm()
          context["reviews"] = Review.objects.filter(product=self.get_object())   # number of users who do reviews for this product
          context['pro_id']  = self.pk_url_kwarg 
+         
          if self.request.user.is_authenticated:
                context["user_like_count"]    = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
          #       context["order"]   = Order.objects.get(user=self.request.user,finish=False) 
-               print(context)
+               #print(context)
                return context
              
+         
          return context
 
 
@@ -239,9 +248,18 @@ def review_rating_product(request,pro_id):
          if rating_value is not None :
             review = Review(product=product, user=user, rating_value=rating_value, rating_text=rating_text)
             review.save()
+            
+            # product.reviews_count
             reviews_count = Review.objects.filter(product=product).count()
             product.reviews_count = reviews_count
             product.save()
+            
+            # product.average_rating
+            product_reviews_aggr = product.reviews.aggregate(product_average_rating=Avg("rating_value"))
+            product.average_rating = product_reviews_aggr['product_average_rating']
+            product.save()
+          
+                     
             messages.success(request, f'thanks ( {request.user.first_name} ) for adding review !')
             return redirect('products:product', pro_id=pro_id)
          else:
