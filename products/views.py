@@ -41,6 +41,13 @@ def create_product_form_view(request):
    
    
 
+def search_view(request):
+   context = {
+       'title' : "Search Page", 
+   }    
+   return render(request,'products/search.html', context)
+
+
 def products_view(request):
    pro = Product.objects.filter(in_stock=True)
 
@@ -73,8 +80,6 @@ def products_view(request):
          schprice_to = request.GET['schprice_to']
          if schprice_from.isdigit() and schprice_to.isdigit():
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
-
-  
    context = {
          'title'    : 'Products Page',
          'products' :  pro,     
@@ -99,21 +104,19 @@ class ProductDetailView(HitCountDetailView):
    count_hit           =  True
 
    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(ProductDetailView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        if self.request.user.is_authenticated:
-            context["title"]   = 'Product Page',
-            context["form"]    = OrderProductCartForm()
-            context["reviews"] = Review.objects.filter(product=self.get_object())
-            context["like"]    = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
-            context["order"]   = Order.objects.get(user=self.request.user,finish=False) 
-            return context
-        else:
-            context["title"]   = 'Product Page',
-            context["form"]    = OrderProductCartForm() 
-            context["reviews"] = Review.objects.filter(product=self.get_object())      
-            return context
+         # Call the base implementation first to get a context
+         context = super(ProductDetailView, self).get_context_data(**kwargs)
+         context["title"]   = 'Product Page',
+         context["form"]    = OrderProductCartForm()
+         context["reviews"] = Review.objects.filter(product=self.get_object())   # number of users who do reviews for this product
+         context['pro_id']  = self.pk_url_kwarg 
+         if self.request.user.is_authenticated:
+               context["user_like_count"]    = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
+         #       context["order"]   = Order.objects.get(user=self.request.user,finish=False) 
+               print(context)
+               return context
+             
+         return context
 
 
 
@@ -188,18 +191,12 @@ def delete_product_view(request,pro_id):
 
 
 
-def search_view(request):
-   context = {
-       'title' : "Search Page", 
-   }    
-   return render(request,'products/search.html', context)
 
-
-
+# Add like to the selected product by automaticated user only
 @login_required(login_url='users:signin')
 def create_product_like(request, pro_id):
    user = request.user
-   product = get_object_or_404(Product, id=pro_id)   
+   product = get_object_or_404(Product, id=pro_id, in_stock=True)   
    if not Like.objects.filter(user=user, product=product).exists():
       like = Like.objects.create(user=user, product=product)
       like.like_status=True

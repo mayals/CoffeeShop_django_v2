@@ -43,7 +43,7 @@
           datasets: [
                       {
                         label      : '# reviews count',
-                        data       : [{% for product in products %}  {{ product.reviews_count }}, {% endfor %}],
+                        data       : [{% for product in products %}  {{ product.average_rating }}, {% endfor %}],
                         borderWidth: 1,
                         backgroundColor: [
                           'rgba(255, 99, 132, 0.2)',

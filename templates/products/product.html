@@ -48,12 +48,11 @@
                           </div>
                           <div>
                               <!-- Like/Dislike button  for authenticated user --> 
-                              {% if like == 1 %}
-                              {{ like}}
-                              <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl red-color fa-heart"></i></a>  
-                              {% elif like == 0 %}
-                              {{ like}}
-                              <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
+                              {{ user_like_count }}
+                              {% if user_like_count == 1 %}
+                                  <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl red-color fa-heart"></i></a>  
+                              {% elif user_like_count == 0 %}
+                                  <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
                               {% endif %}
 
                              
