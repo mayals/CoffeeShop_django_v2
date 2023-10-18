@@ -97,10 +97,12 @@
             <a  href="{% url 'products:products' %}" class="btn btn-light">
                 <i class="fa-solid fa-arrow-left"></i>   Back to Shopping
             </a>
-            <a  href="{%  url 'ecommerce:checkout-view'  order_id=order.id  %}" class="btn btn-success">
-                Continue to Checkout  <i class="fa-solid fa-arrow-right"></i>
-            </a>
-        </div>
+            {% if order.orderproducts.count > 0 %}
+                <a  href="{%  url 'ecommerce:checkout-view'  order_id=order.id  %}" class="btn btn-success">
+                    Continue to Checkout  <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            {% endif %}
+            </div>
     </section>
 
 
