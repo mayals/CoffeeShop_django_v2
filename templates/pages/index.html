@@ -97,7 +97,8 @@
                     <!-- vistors views count -->
                     <span><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>&nbsp;&nbsp;
                     <span><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> &nbsp;&nbsp; 
-                    <span><i class="fa-regular fa-star"></i></span> &nbsp;&nbsp;
+                    <!-- product.average_rating -->
+                    <span><i class="fa-regular fa-star"></i>{{product.average_rating}}({{product.reviews_count}})</span> &nbsp;&nbsp; 
                   </div>
                   {% if request.user.is_authenticated and request.user.is_superuser %}
                   <!-- admin only --> 

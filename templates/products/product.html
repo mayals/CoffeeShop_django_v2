@@ -59,7 +59,8 @@
                               <!-- hit count for authenticated user -->
                              <span><i class="fa-regular fa-eye fa-xl"></i> {% get_hit_count for product %}</span>
                           
-                            {{ product.average_rating}}
+                            <!-- product.average_rating -->
+                             <span><i class="fa-regular fa-star"></i>{{product.average_rating}}({{product.reviews_count}})</span> &nbsp;&nbsp; 
                             
                              <!--  edit & delete for admin only --> 
                              {% if request.user.is_authenticated and request.user.is_superuser %}

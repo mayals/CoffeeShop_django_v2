@@ -48,6 +48,7 @@
                   <div class="text-center">
                     <span><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>&nbsp;&nbsp; 
                     <span><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> &nbsp;&nbsp; 
+                    <!-- product.average_rating -->
                     <span><i class="fa-regular fa-star"></i>{{product.average_rating}}({{product.reviews_count}})</span> &nbsp;&nbsp; 
                     
                     <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-lg fa-cart-plus"></i></a>
