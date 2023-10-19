@@ -28,13 +28,18 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ product.name }}</h5>
                   
+
+                  <!-- product_average_rating_stars -->
                   <span>
                     {% include 'includes/product_average_rating_stars.html' %}
                   </span>
-                  
+                  <!-- product_average_rating_stars -->
+
+
 
                   <div class="d-inline-flex">
                     <span class='p-1'style="font-size:15px; color:#a2947e;"><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>
+                    &nbsp;
                     <span class='p-1'><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> 
                   </div>
 

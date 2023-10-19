@@ -8,23 +8,7 @@
 <div class="container  my-5 rounded border border-warning">
         
     <h2 class="text-center">Product Details</h2>
-    <hr>{{product.id}}
-
-
-    <!--product_average_rating_stars-->
-    <div >
-      <span style="font-size: 1.5rem;" class="text-warning"  title="{{ product.average_rating }}/5">
-      <!-- By default the star is full else it is empty otherwise it is half -->
-          <i class="fa fa-star{% if product.average_rating < 0.5%} fa-regular{% elif product.average_rating >= 0.5 and product.average_rating < 1 %}-half-stroke{% endif %}" aria-hidden="true"></i>
-          <i class="fa fa-star{% if product.average_rating < 1.5%} fa-regular{% elif product.average_rating >= 1.5 and product.average_rating < 2 %}-half-stroke{% endif %}" aria-hidden="true"></i>
-          <i class="fa fa-star{% if product.average_rating < 2.5%} fa-regular{% elif product.average_rating >= 2.5 and product.average_rating < 3 %}-half-stroke{% endif %}" aria-hidden="true"></i>
-          <i class="fa fa-star{% if product.average_rating < 3.5%} fa-regular{% elif product.average_rating >= 3.5 and product.average_rating < 4 %}-half-stroke{% endif %}" aria-hidden="true"></i>
-          <i class="fa fa-star{% if product.average_rating < 4.5%} fa-regular{% elif product.average_rating >= 4.5 and product.average_rating < 5 %}-half-stroke{% endif %}" aria-hidden="true"></i>
-      </span>
-      <span>( {{ product.average_rating }}/5.0)      {{product.reviews_count}} <i class="fa-solid fa-user fa-xs"></i></span>
-    </div>
-  <!--product_average_rating_stars-->
-
+  
 
 
   <section>
@@ -32,9 +16,25 @@
           <div class="card mb-3 w-100" >
             <div class="row no-gutters">
               
+              <!-- image column and like buton-->
+              <!-- Like/Dislike button  for authenticated user --> 
               <div class="col-md-4">
-                <img src="{{ product.photo.url }}" class="card-img" alt={{ product.name }}>
+                  <div class='my-image-container'>
+                      {% if request.user.is_authenticated %}
+                          {% if user_like_count == 1 %}
+                              <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"><i class="fa-solid fa-2xl red-color fa-heart"></i></a>  
+                          {% elif user_like_count == 0 %}
+                              <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"><i class="fa-solid fa-heart fa-2xl" style="color:#ffffff;"></i></a>  
+                          {% endif %}
+                      {% else %}
+                          <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"  title="Need Login to like this product"><i class="fa-solid fa-heart fa-2xl" style="color:#ffffff;"></i></a>  
+                      {% endif %}  
+                      <img src="{{ product.photo.url }}" class="card-img" alt={{ product.name }}>
+                  </div>
               </div>
+              <!-- image column and like button -->
+
+
 
               <div class="col-md-8">
                 <div class="card-body">
@@ -44,6 +44,19 @@
                         <hr>
                         <p class="card-text">Current Price: <span id="price" class="bg-dark text-light rounded-circle p-2">{{product.price}}</span></p>
                       
+
+                          <!-- product_average_rating_stars -->
+                           <span>
+                           {% include 'includes/product_average_rating_stars.html' %}
+                           </span>
+                          <!-- product_average_rating_stars -->
+                          
+
+                          <div class="d-inline-flex">
+                            <span class='p-1'style="font-size:15px; color:#a2947e;"><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>
+                            &nbsp; 
+                            <span class='p-1'><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> 
+                          </div>
 
                       <!--  only authenticated users see this div  --> 
                       {% if request.user.is_authenticated %}
@@ -69,15 +82,11 @@
                               {% if user_like_count == 1 %}
                                   <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl red-color fa-heart"></i></a>  
                               {% elif user_like_count == 0 %}
-                                  <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
+                                  <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-heart fa-xl" style="color: #c5c3c3;"></i></a>  
                               {% endif %}
 
                              
-                              <!-- hit count for authenticated user -->
-                             <span><i class="fa-regular fa-eye fa-xl"></i> {% get_hit_count for product %}</span>
-                          
-                            <!-- product.average_rating -->
-                             <span><i class="fa-regular fa-star"></i>{{product.average_rating}}({{product.reviews_count}})</span> &nbsp;&nbsp; 
+                            
                             
                              <!--  edit & delete for admin only --> 
                              {% if request.user.is_authenticated and request.user.is_superuser %}
@@ -99,7 +108,7 @@
                      
                       <div>
                         <!-- add-to-cart form  for anonymous --> 
-                        <div class="card-text border rounded border-secondary p-2 my-1">
+                        <div class="card-text border rounded p-2 my-1">
                              
                             <form method='GET' action="{% url 'ecommerce:add-to-cart' product.id %}"  class='form-group' novalidate>
                               {% csrf_token %}
@@ -112,11 +121,11 @@
                             <div>
                               <a href="{% url 'products:products'  %}" type="link" class="btn btn-sm btn-light">All Products</a>
                             </div>
-                        </div>  
+                        
+                          </div>  
                         <!-- Like/Dislike button--> 
-                        <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2" data-toggle="tooltip" data-placement="top" title="Need Login to like this product"><i class="fa-solid fa-heart fa-xl" style="color: #f1f2f3;"></i></a>  
-                        <!-- add to fav--> 
-                        <a href="" class="btn btn-outline-light mb-2"><i class="fa-solid fa-xl fa-folder-plus"></i></a>
+                        <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2" data-toggle="tooltip" data-placement="top" title="Need Login to like this product"><i class="fa-solid fa-heart fa-xl" style="color:#c5c3c3;"></i></a>  
+                        
                       </div>
                     
                       <!-- end div of  only anonymous  --> 

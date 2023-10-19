@@ -276,7 +276,7 @@ table td{
 
 .rating-container label{
   font-size: 20px;
-  color:#c5c3c3;
+  color:#787777;
   padding:10px;
   float:right; 
   transition: all 0.2s ease;
@@ -306,5 +306,20 @@ input:checked ~ label{
   justify-content: center;
   
   align-items: center;
+}
+
+
+.my-image-container{
+  position:relative;
+  display:inline-block;
+  text-align:center;
+ 
+}
+.my-button{
+  position:absolute;
+  top:2px;
+  right:2px;
+  /* width:100px;
+  height:30px; */
 }
 

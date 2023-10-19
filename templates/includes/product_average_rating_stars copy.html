@@ -1,0 +1,13 @@
+ <!--product_average_rating_stars-->
+ <div >
+  <span style="font-size: 1.5rem;" class="text-warning"  title="{{ product.average_rating }}/5">
+  <!-- By default the star is full else it is empty otherwise it is half -->
+      <i class="fa fa-star{% if product.average_rating < 0.5%} fa-regular{% elif product.average_rating >= 0.5 and product.average_rating < 1 %}-half-stroke{% endif %}" aria-hidden="true"></i>
+      <i class="fa fa-star{% if product.average_rating < 1.5%} fa-regular{% elif product.average_rating >= 1.5 and product.average_rating < 2 %}-half-stroke{% endif %}" aria-hidden="true"></i>
+      <i class="fa fa-star{% if product.average_rating < 2.5%} fa-regular{% elif product.average_rating >= 2.5 and product.average_rating < 3 %}-half-stroke{% endif %}" aria-hidden="true"></i>
+      <i class="fa fa-star{% if product.average_rating < 3.5%} fa-regular{% elif product.average_rating >= 3.5 and product.average_rating < 4 %}-half-stroke{% endif %}" aria-hidden="true"></i>
+      <i class="fa fa-star{% if product.average_rating < 4.5%} fa-regular{% elif product.average_rating >= 4.5 and product.average_rating < 5 %}-half-stroke{% endif %}" aria-hidden="true"></i>
+  </span>
+  <span>( {{ product.average_rating }}/5.0)      {{product.reviews_count}} <i class="fa-solid fa-user fa-xs"></i></span>
+</div>
+<!--product_average_rating_stars-->
