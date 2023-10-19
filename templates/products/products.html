@@ -10,7 +10,7 @@
 <div class="my-form container p-5 my-5 rounded border border-warning">
       
             
-
+  &nbsp;&nbsp;
 <!-- --------------------------------------------- -->
       <!--All products -->
       <section>
@@ -27,6 +27,20 @@
                 </a>
                 <div class="card-body">
                   <h5 class="card-title">{{ product.name }}</h5>
+                  
+                  <span>
+                    {% include 'includes/product_average_rating_stars.html' %}
+                  </span>
+                  
+
+                  <div class="d-inline-flex">
+                    <span class='p-1'style="font-size:15px; color:#a2947e;"><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>
+                    <span class='p-1'><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> 
+                  </div>
+
+                  <br>
+                  <br>
+
                   <p class="card-text">
                     {% if product.description|length >= 12 %}
                     {% comment %} {{ product.description|slice:":50" }}.. more {% endcomment %}
@@ -38,20 +52,15 @@
                   </p>
                   <!-- admin only --> 
                   {% if request.user.is_authenticated and request.user.is_superuser %}
-                    <div class="text-center">
+                    <div class="btn-group" role="group">
                       <a href="{% url 'products:update-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-pen-to-square"></i></a>
                       <a href="{% url 'products:delete-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-trash-can"></i></a>
                     </div>
                   {% endif %}
 
                   <!-- all users  --> 
-                  <div class="text-center">
-                    <span><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>&nbsp;&nbsp; 
-                    <span><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> &nbsp;&nbsp; 
-                    <!-- product.average_rating -->
-                    <span><i class="fa-regular fa-star"></i>{{product.average_rating}}({{product.reviews_count}})</span> &nbsp;&nbsp; 
-                    
-                    <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-lg fa-cart-plus"></i></a>
+                  <div class="btn-group-sm   d-flex flex-row-reverse" role="group">
+                    <button type="submit"  class="btn btn-sm btn-success"><i class="fa-solid fa-xl fa-cart-plus"></i></button> 
                   </div>
                 </div>
               </div>
