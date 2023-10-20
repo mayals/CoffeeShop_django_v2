@@ -308,17 +308,19 @@ input:checked ~ label{
   align-items: center;
 }
 
-
+/* https://www.w3schools.com/cssref/playdemo.php?filename=playcss_z-index&preval=2 */
 .my-image-container{
   position:relative;
   display:inline-block;
   text-align:center;
+ 
  
 }
 .my-button{
   position:absolute;
   top:2px;
   right:2px;
+  z-index:3;
   /* width:100px;
   height:30px; */
 }

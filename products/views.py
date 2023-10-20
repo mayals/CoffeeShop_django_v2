@@ -83,10 +83,12 @@ def products_view(request):
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
    
    
-   
+   likes   = Like.objects.filter(user=request.user)
+   print(likes)
    context = {
          'title'    : 'Products Page',
          'products' :  pro, 
+         'likes'    : likes,
          
       }    
    return render(request,'products/products.html', context)
@@ -219,7 +221,13 @@ def create_product_like(request, pro_id):
       product.likes = product.likes - 1
    product.likes = product.likes
    product.save()
-   return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
+   print(request.path)
+   if 'product' in request.path:
+       return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
+   if 'products' in request.path:
+       return redirect('products:products')
+
+
 
 
 @login_required(login_url='users:signin')

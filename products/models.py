@@ -37,7 +37,7 @@ class Product(models.Model):
 
 class Like(models.Model):
     user    = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="likes_product")
     like_status = models.BooleanField(default=False)
 
     def __str__(self):
