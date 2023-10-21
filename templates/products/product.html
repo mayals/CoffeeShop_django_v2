@@ -21,10 +21,10 @@
               <div class="col-md-4">
                   <div class='my-image-container'>
                       {% if request.user.is_authenticated %}
-                          {% if user_like_count == 1 %}
+                          {% if like_user.like_status == True %}
                               <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"><i class="fa-solid fa-2xl red-color fa-heart"></i></a>  
-                          {% elif user_like_count == 0 %}
-                              <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"><i class="fa-solid fa-heart fa-2xl" style="color:#ffffff;"></i></a>  
+                          {% elif like_user.like_status == False %}
+                              <a  href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"><i class="fa-solid fa-heart fa-2xl" style="color:#ffffff;"></i></a>  
                           {% endif %}
                       {% else %}
                           <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"  title="Need Login to like this product"><i class="fa-solid fa-heart fa-2xl" style="color:#ffffff;"></i></a>  

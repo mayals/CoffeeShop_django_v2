@@ -83,12 +83,12 @@ def products_view(request):
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
    
    
-   
+   likes   = Like.objects.filter(user=request.user)
    
    context = {
          'title'    : 'Products Page',
          'products' :  pro, 
-       
+         'likes'    : likes,
          
       }    
    return render(request,'products/products.html', context)
@@ -121,10 +121,12 @@ class ProductDetailView(HitCountDetailView):
          context['pro_id']  = self.pk_url_kwarg 
          
          if self.request.user.is_authenticated:
-               context["like_user"]    = Like.objects.get(user=self.request.user,product=self.get_object())
+               context["user_like_count"]    = Like.objects.filter(user=self.request.user,product=self.get_object()).count()
          #       context["order"]   = Order.objects.get(user=self.request.user,finish=False) 
+               #print(context)
                return context
-               
+             
+         
          return context
 
 
@@ -205,32 +207,26 @@ def delete_product_view(request,pro_id):
 @login_required(login_url='users:signin')
 def create_product_like(request, pro_id):
    user = request.user
-   product = get_object_or_404(Product, id=pro_id, in_stock=True)
-
-   like, created = Like.objects.get_or_create(user=user, product=product)
-   if created:
-        like.like_status = True
-        like.save()
-        product.likes += 1
-        product.save()
+   product = get_object_or_404(Product, id=pro_id, in_stock=True)   
    
+   if not Like.objects.filter(user=user, product=product).exists():
+      like = Like.objects.create(user=user, product=product)
+      like.like_status=True
+      like.save()
+      product.likes = product.likes + 1
    else:
-      if like.like_status == True :
-         like.like_status = False
-         like.save()
-         product.likes -= 1
-         product.save()
-         print('now false')
-
-      elif like.like_status == False : 
-         like.like_status = True
-         like.save()
-         product.likes += 1
-         product.save() 
-         print('now true')  
-
-   return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
-   
+      like = Like.objects.filter(user=user, product=product)
+      like.delete()
+      # like.like_status=False  NOT NEED BECAUSE like is DELETED 
+      # Like.objects.update(product=product)
+      product.likes = product.likes - 1
+   product.likes = product.likes
+   product.save()
+   print(request.GET)
+   if 'productpage' in request.GET :
+       return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
+   if 'productspage' in request.GET :
+       return redirect('products:products')
 
 
 

@@ -22,9 +22,20 @@
             {% for product in products %}
             <div>
               <div class="card m-2" style="width: 18rem;">
-                  <div>
+                  <div class='my-image-container'>
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"><i class="fa-solid fa-heart fa-2xl" style="color:#ffffff"></i></a>  
+                            {% for like in likes %}
+                                    {{like.like_status}}
+                                        {% if like.like_status %}
+                                          <a   href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"><i class="fa-solid fa-heart fa-2xl red-color"></i></a>  
+                                        {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn my-button"  title="Need Login to like this product"><i class="fa-solid fa-heart fa-2xl" style="color:#ffffff;"></i></a>  
+                        {% endif %}
                       <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline">
-                        <img src="{{ product.photo.url }}" class="card-img-top" alt={{ product.name}}>
+                      <img src="{{ product.photo.url }}" class="card-img-top" alt={{ product.name}}>
                       </a>
                   </div>
                 
