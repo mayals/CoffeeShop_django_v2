@@ -43,7 +43,11 @@ def add_to_cart(request, pro_id):
             orderproduct.product_amount = orderproduct.quantity * orderproduct.price_at_order
             orderproduct.save()
             messages.success(request,f'(The product {product_name} ), add to cart successfully !')
-            return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
+            print(request.GET)
+            if 'allProductsbutton' in request.GET:
+                return HttpResponseRedirect(reverse('products:products'))
+            else:
+               return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
 
 
         #  create new_order 
@@ -57,7 +61,10 @@ def add_to_cart(request, pro_id):
                                                     )
         orderproduct.save()
         messages.success(request,f'(The product {product_name} ), add to cart successfully !')
-        return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
+        if 'allProductsbutton' in request.GET:
+            return HttpResponseRedirect(reverse('products:products'))
+        else:
+            return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
 
 
     messages.warning(request,f'(The product {product_name}), Not add !')

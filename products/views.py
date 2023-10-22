@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import Product, Like, Review
 from .forms import CreateProductForm
-from ecommerce.models import Order
+from ecommerce.models import Order,OrderProduct
 from ecommerce.forms import OrderProductCartForm
 # https://django-hitcount.readthedocs.io/en/latest/installation.html
 # https://www.youtube.com/watch?v=my3Fbuho2zw
@@ -82,14 +82,15 @@ def products_view(request):
          if schprice_from.isdigit() and schprice_to.isdigit():
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
    
-   
-   
-   
+   form   = OrderProductCartForm()
+   order = Order.objects.get(user=request.user, finish=False)
+   orderproducts = OrderProduct.objects.filter(order=order)
+    
    context = {
          'title'    : 'Products Page',
          'products' :  pro, 
-       
-         
+         'form'     : form,
+         'orderproducts' :  orderproducts  
       }    
    return render(request,'products/products.html', context)
 
@@ -121,7 +122,7 @@ class ProductDetailView(HitCountDetailView):
          context['pro_id']  = self.pk_url_kwarg 
          
          if self.request.user.is_authenticated:
-               context["like_user"]    = Like.objects.get(user=self.request.user,product=self.get_object())
+               context["like_user"]    = Like.objects.filter(user=self.request.user,product=self.get_object())
          #       context["order"]   = Order.objects.get(user=self.request.user,finish=False) 
                return context
                

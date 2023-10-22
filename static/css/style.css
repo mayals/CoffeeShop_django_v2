@@ -325,3 +325,19 @@ input:checked ~ label{
   height:30px; */
 }
 
+/* https://www.w3schools.com/cssref/playdemo.php?filename=playcss_z-index&preval=2 */
+.my-span-container{
+  position:relative;
+  display:inline-block;
+  text-align:center;
+ 
+ 
+}
+.my-incart{
+  position:absolute;
+  top:2px;
+  right:2px;
+  z-index:3;
+  /* width:100px;
+  height:30px; */
+}
