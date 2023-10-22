@@ -83,14 +83,22 @@ def products_view(request):
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
    
    form   = OrderProductCartForm()
-   order = Order.objects.get(user=request.user, finish=False)
-   orderproducts = OrderProduct.objects.filter(order=order)
-    
-   context = {
+
+   if request.user.is_authenticated:
+      order = Order.objects.get(user=request.user, finish=False)
+      orderproducts = OrderProduct.objects.filter(order=order)
+      context = {
          'title'    : 'Products Page',
          'products' :  pro, 
          'form'     : form,
          'orderproducts' :  orderproducts  
+      } 
+    
+   else: 
+      context = {
+         'title'    : 'Products Page',
+         'products' :  pro, 
+         'form'     : form, 
       }    
    return render(request,'products/products.html', context)
 
