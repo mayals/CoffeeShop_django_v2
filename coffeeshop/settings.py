@@ -88,6 +88,9 @@ INSTALLED_APPS = [
 
     # https://django-hitcount.readthedocs.io/en/latest/installation.html
     "hitcount",
+
+    # https://pypi.org/project/django-social-share/
+    'django_social_share'
 ]
 
 

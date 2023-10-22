@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load hitcount_tags %}
+<!--https://studygyaan.com/django/adding-a-social-share-button-to-your-django-website -->
+{% load social_share %}
+
 
 {% block content %}
 {% include 'includes/messages.html' %}
@@ -85,7 +88,13 @@
                                   <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-solid fa-heart fa-xl" style="color: #c5c3c3;"></i></a>  
                               {% endif %}
 
-                             
+                              <div class="social-sharing border rounded border-secondary p-2 my-1">
+                              </h5><i class="fas fa-share-alt"></i></h5>
+                              {% post_to_facebook object_or_url "Share to Facebook!" %}
+                              {% post_to_twitter "New Product: {{product.name}}. Check it out!" object_or_url "Share to Twitter" %}
+                              {% post_to_whatsapp object_or_url "Share via WhatsApp" %}
+                              </div>
+        
                             
                             
                              <!--  edit & delete for admin only --> 
@@ -123,14 +132,20 @@
                             </div>
                         
                           </div>  
-                        <!-- Like/Dislike button--> 
-                        <a href="{% url 'products:like-product' pro_id=product.id %}" class="btn btn-outline-light mb-2" data-toggle="tooltip" data-placement="top" title="Need Login to like this product"><i class="fa-solid fa-heart fa-xl" style="color:#c5c3c3;"></i></a>  
-                        
+                       
+                      </div>
+
+                      <div class="social-sharing border rounded  p-2 my-1">
+                      </h5><i class="fas fa-share-alt"></i></h5>
+                      {% post_to_facebook object_or_url "Share to Facebook!" %}
+                      {% post_to_twitter "New Product: {{product.name}}. Check it out!" object_or_url "Share to Twitter" %}
+                      {% post_to_whatsapp object_or_url "Share via WhatsApp" %}
                       </div>
                     
                       <!-- end div of  only anonymous  --> 
                     {% endif %}
-
+                 
+                    
                 </div>
               </div>
           
