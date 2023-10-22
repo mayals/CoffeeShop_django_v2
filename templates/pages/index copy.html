@@ -26,15 +26,15 @@
           <div class="carousel-inner">
 
             <div class="carousel-item active" data-interval="1500">
-                <img src="{% static 'img/carousel_images/back1.jpg' %}" class="d-block w-100" alt="...">
+                <img src="{% static 'img/back1.jpg' %}" class="d-block w-100" alt="...">
             </div>
 
             <div class="carousel-item" data-interval="1500">
-              <img src="{% static 'img/carousel_images/back2.jpg' %}" class="d-block w-100" alt="...">
+              <img src="{% static 'img/back2.jpg' %}" class="d-block w-100" alt="...">
             </div>
 
             <div class="carousel-item" data-interval="1500">
-              <img src="{% static 'img/carousel_images/back3.jpg' %}" class="d-block w-100" alt="...">
+              <img src="{% static 'img/back3.jpg' %}" class="d-block w-100" alt="...">
             </div>
 
           </div>
@@ -77,108 +77,46 @@
             {% for product in products|slice:':6' %}
             <div>
               <div class="card m-2" style="width: 18rem;">
-                  <div>
-                      <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline">
-                        <img src="{{ product.photo.url }}" class="card-img-top" alt={{ product.name}}>
-                      </a>
-                  </div>
+                <a href="{% url 'products:product' pro_id=product.id %}" class="btn btn-outline">
+                  <img src="{{ product.photo.url }}" class="card-img-top" alt={{ product.name}}>
+                </a>
+
                 <div class="card-body">
                   <h5 class="card-title">{{ product.name }}</h5>
                   <p class="card-text">Current Price: <span id="price" class="bg-dark text-light rounded-circle p-2">{{product.price}}</span></p>
-
-
-                  <!-- product_average_rating_stars -->
-                  <span>
-                    {% include 'includes/product_average_rating_stars.html' %}
-                  </span>
-                  <!-- product_average_rating_stars -->
-
-
-
-                  <div class="d-inline-flex">
-                    <span class='p-1'style="font-size:15px; color:#a2947e;"><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>
-                    &nbsp;
-                    <span class='p-1'><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> 
-                  </div>
-
-                  <br>
-                  <br>
-
                   <p class="card-text">
                     {% if product.description|length >= 12 %}
                     {% comment %} {{ product.description|slice:":50" }}.. more {% endcomment %}
                     {{ product.description|truncatewords:12 }}<a href="{% url 'products:product' pro_id=product.id %}" ><i class="fa-solid fa-angles-right red-color"></i></a>
-                    
                     {% else %}
                     {{ product.description }}
                     {% endif %}
                   </p>
-                  <hr>
-
-                  <!-- all  authenticatedd users  --> 
-                  {% if request.user.is_authenticated %}
-                      <div>
-                          <!--  add to cart  form for authenticated user -->
-                          <div>
-                              <form method='GET' action="{% url 'ecommerce:add-to-cart' pro_id=product.id %}" novalidate>
-                                  {% csrf_token %}
-                                  {{form}}
-                                    <button type="submit"  name='indexbutton' class="btn btn-sm btn-success"><i class="fa-solid fa-xl fa-cart-plus"></i></button> 
-                              </form>
-                              <span style="font-size:15px; color:#a2947e;"> 
-                                  <i class="fas fa-shopping-cart"></i>
-                                  ({% for p in orderproducts %}
-                                      {% if product.id == p.product.id %}
-                                        {{ p.quantity|default_if_none:'0' }}
-                                      {% endif %}
-                                  {% endfor %})
-                              </span>
-                          </div>
-                          <div> 
-                             <!--  edit & delete for admin only --> 
-                             <!-- admin only --> 
-                              {% if request.user.is_authenticated and request.user.is_superuser %}
-                              <div class="btn-group" role="group">
-                                <a href="{% url 'products:update-product' pro_id=product.id %}" class="btn btn-outline-light"><i class="fa-regular fa-pen-to-square"></i></a>
-                                <a href="{% url 'products:delete-product' pro_id=product.id %}" class="btn btn-outline-light"><i class="fa-regular fa-trash-can"></i></a>
-                              </div>
-                            {% endif %}
-                            <!--  end admin only -->
-                          </div>
-
-                      </div>
-                      {% else %}
-                      <!-- end  div of only authenticated   --> 
-
-
-                      <!-- start div of  only anonymous see this div --> 
-                     
-                      <div>
-                        <!-- add-to-cart form  for anonymous --> 
-                        <div class="card-text">
-                             
-                            <form method='GET' action="{% url 'ecommerce:add-to-cart' product.id %}"  class='form-group' novalidate>
-                              {% csrf_token %}
-                              {{form}}
-                              <div class='btn-group'>
-                                <button type="submit"  class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Need Login to add this product to the cart"><i class="fa-solid fa-xl fa-cart-plus"></i></button> 
-                              </div>
-                            </form>
-              
-                          </div>  
-                        
-                      </div>
-                    
-                      <!-- end div of  only anonymous  --> 
-                    {% endif %}
+                  <!-- all users  --> 
+                  <div class="text-center">
+                    <!-- vistors views count -->
+                    <span><i class="fa-regular fa-eye fa-lg"></i> {% get_hit_count for product %}</span>&nbsp;&nbsp;
+                    <span><i class="fa-solid fa-heart fa-lg red-color"></i>{{product.likes}}</span> &nbsp;&nbsp; 
+                    <!-- product.average_rating -->
+                    <span><i class="fa-regular fa-star"></i>{{product.average_rating}}({{product.reviews_count}})</span> &nbsp;&nbsp; 
+                  </div>
+                  {% if request.user.is_authenticated and request.user.is_superuser %}
+                  <!-- admin only --> 
+                    <div class="text-center">
+                      <a href="{% url 'products:update-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-pen-to-square"></i></a>
+                      <a href="{% url 'products:delete-product' pro_id=product.id %}" class="btn btn-outline-light mb-2"><i class="fa-regular fa-trash-can"></i></a>
+                    </div>
+                  {% endif %}
+                  
+                
                 </div>
               </div>
-              </div>
-              {% empty %}
-              <div class="card-body">
-                <h3 class="card-text">No product.</h3>
             </div>
-            {% endfor %}   
+            {% empty %}
+            <div class="card-body">
+              <h3 class="card-text">No product.</h3>
+            </div>
+            {% endfor %}  
           </div>
         </div>
       </section>

@@ -46,6 +46,8 @@ def add_to_cart(request, pro_id):
             print(request.GET)
             if 'allProductsbutton' in request.GET:
                 return HttpResponseRedirect(reverse('products:products'))
+            if 'indexbutton' in request.GET:
+                return HttpResponseRedirect(reverse('pages:index'))
             else:
                return HttpResponseRedirect(reverse('products:product', args=[pro_id]))
 
