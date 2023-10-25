@@ -12,10 +12,32 @@
             
   &nbsp;&nbsp;
 <!-- --------------------------------------------- -->
-      <!--All products -->
+      <!--sort products -->
+      <row>
+          <h2 class="text-center">Products</h2>
+      
+          <!-- sort products button -->
+          <section class='float-right mr-4'>
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+              <div class="btn-group" role="group">
+                <button id="btnGroupDrop" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Sort By
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                  <a class="dropdown-item"   href="{% for product in products %}?SORTATZ={{product.id}}{% endfor %}"> Alphabetically (A to Z)</a>
+                  <a class="dropdown-item"   href="{% for product in products %}?SORTRATING={{product.id}}{% endfor %}">Rating (Hight to Low)</a>
+                  <a class="dropdown-item"   href="{% for product in products %}?SORTPRICELTH={{product.id}}{% endfor %}">Price (Low to Hight)</a>
+                  <a class="dropdown-item"   href="{% for product in products %}?SORTPRICEHTL={{product.id}}{% endfor %}">Price (High to Low)</a>
+                  <a class="dropdown-item"   href="{% for product in products %}?SORTNEWARRIVAL={{product.id}}{% endfor %}">New Arrival</a>
+                </div>
+              </div>
+            </div>
+          </section>
+          <!--  end sort products button -->
+      </row>  
+       <br><br>
+ <!--All products list -->
       <section>
-        <h1 class="text-center">Products</h1>
-        
         <div class="container-fluid">
           <div class="row p-5">
 
