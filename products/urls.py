@@ -13,4 +13,5 @@ urlpatterns = [
     path('user_favorites/<str:user_id>/',views.user_favorites, name='user-favorites'),
     path('review_rating_product/<int:pro_id>/',views.review_rating_product, name='review_rating_product'),
     path('search/',views.search_view, name='search'),
+  
 ]

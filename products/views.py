@@ -49,6 +49,9 @@ def search_view(request):
    return render(request,'products/search.html', context)
 
 
+
+
+
 def products_view(request):
    pro = Product.objects.filter(in_stock=True)
 
@@ -82,6 +85,29 @@ def products_view(request):
          if schprice_from.isdigit() and schprice_to.isdigit():
             pro =  pro.filter(price__gte=schprice_from,price__lte=schprice_to)
    
+   print('request.GET',request.GET)
+   if 'SORTATZ' in request.GET:
+      print('SORTATZ')
+      pro = pro.order_by('name')
+   
+   if 'SORTRATING' in request.GET:
+      print('SORTRATING')
+      pro = pro.order_by('-average_rating')
+  
+   if 'SORTPRICELTH' in request.GET:
+      print('SORTPRICELTH')
+      pro = pro.order_by('price')
+   
+   if 'SORTPRICEHTL' in request.GET:
+      print('SORTPRICEHTL')
+      pro = pro.order_by('-price')
+   
+   if 'SORTNEWARRIVAL' in request.GET:
+      print('SORTNEWARRIVAL')
+      pro = pro.order_by('publish_date')
+   
+
+
    form   = OrderProductCartForm()
 
    if request.user.is_authenticated:
@@ -93,7 +119,6 @@ def products_view(request):
          'form'     : form,
          'orderproducts' :  orderproducts  
       } 
-    
    else: 
       context = {
          'title'    : 'Products Page',

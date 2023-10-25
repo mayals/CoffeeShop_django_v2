@@ -54,21 +54,35 @@
           <a class="btn btn-warning btn-lg" href="#" role="button">Learn more</a>
         </div>
       </section>
-
-      <hr>
-
+      <br>
 <!-- --------------------------------------------- -->
-<div class="text-right">
-   <a href="{% url 'products:products'  %}" class="btn btn-sm btn-outline-light mt-2 mb-4"><i class="fa fa-align-center" aria-hidden="true"></i>  All Products</a>
-</div>
-<!-- --------------------------------------------- -->
-
-
-
+<row>
+  <h2 class="text-center">Latest products</h2>
+<section class='float-right'>
+  <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+    <div class="btn-group" role="group">
+      <button id="btnGroupDrop" type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Sort By
+      </button>
+      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+        <a class="dropdown-item"   href="http://127.0.0.1:8000/products/products/{% for product in products %}?SORTATZ={{product.id}}{% endfor %}"> Alphabetically (A to Z)</a>
+        <a class="dropdown-item"   href="http://127.0.0.1:8000/products/products/{% for product in products %}?SORTRATING={{product.id}}{% endfor %}">Rating (Hight to Low)</a>
+        <a class="dropdown-item"   href="http://127.0.0.1:8000/products/products/{% for product in products %}?SORTPRICELTH={{product.id}}{% endfor %}">Price (Low to Hight)</a>
+        <a class="dropdown-item"   href="http://127.0.0.1:8000/products/products/{% for product in products %}?SORTPRICEHTL={{product.id}}{% endfor %}">Price (High to Low)</a>
+        <a class="dropdown-item"   href="http://127.0.0.1:8000/products/products/{% for product in products %}?SORTNEWARRIVAL={{product.id}}{% endfor %}">New Arrival</a>
+      </div>
+    </div>
+    
+    <a href="{% url 'products:products' %}" class="btn btn-light">All Products</a>
+   
+    
+  </div>
+</section>
+</row>
 
       <!--latest product-->
       <section>
-        <h1 class="text-center">Latest products</h1>
+      
         
         <div class="container-fluid">
           <div class="row p-5" style="padding-left: 17% !important;">
