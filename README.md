@@ -39,7 +39,7 @@ User Registration and Authentication:
 Registered and activated users can log in to their accounts.
 
 - Browsing Coffee Menu:
-Any visitor can browse the coffee menu to view available products also can view product detail page but cannot interactive with it before login in. Each product listing includes an image, name, description, price, and an option to add it to the cart.
+Any visitor can browse the coffee menu to view available products also can view product detail page but cannot interactive with it before login in. Each product listing includes an image, name, description, price, and an option to add it to the cart and like the product.
 
 - Adding to Cart:
 Users can add products to their shopping cart.
