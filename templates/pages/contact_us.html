@@ -1,0 +1,46 @@
+{% extends 'base.html' %} 
+{% load static %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'includes/messages.html' %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us</title>
+</head>
+<body>
+<section class="my-form container p-5 my-5 rounded border border-warning">   
+    <h1 CLASS='text-center'>Contact Us</h1>
+    <br>
+    <form class="needs-validation" method="post" action="" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <div>
+                    {{ form.name|as_crispy_field }}
+                </div>
+                <div>
+                    {{ form.email|as_crispy_field }}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div>
+                    {{ form.subject|as_crispy_field }}
+                </div>
+                <div>
+                    {{ form.message|as_crispy_field }}
+                </div>
+            </div>
+        </div>    
+        <button class="btn btn-dark btn-block" type="submit">Send</button>
+    </form>
+</body>
+</section>
+</html>
+        
+
+{% endblock %}
+
