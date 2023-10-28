@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Product, Like, Review
 from .forms import CreateProductForm
 from ecommerce.models import Order,OrderProduct
@@ -106,6 +107,21 @@ def products_view(request):
    
 
 
+   
+  # paginator ###################### 
+   paginator = Paginator(pro, 10)
+   page = request.GET.get('page')
+
+   try:
+      pro = paginator.page(page)
+   except PageNotAnInteger:
+      # If page is not an integer deliver the first page
+      pro = paginator.page(1)
+   except EmptyPage:
+      # If page is out of range deliver last page of results
+      pro = paginator.page(paginator.num_pages)
+
+
 
    form   = OrderProductCartForm()
 
@@ -113,16 +129,18 @@ def products_view(request):
       order = Order.objects.get(user=request.user, finish=False)
       orderproducts = OrderProduct.objects.filter(order=order)
       context = {
-         'title'    : 'Products Page',
-         'products' :  pro, 
-         'form'     : form,
-         'orderproducts' :  orderproducts  
+         'title'         : 'Products Page',
+         'products'      :  pro, 
+         'form'          :  form,
+         'orderproducts' :  orderproducts, 
+         'page'          :  page,
       } 
    else: 
       context = {
          'title'    : 'Products Page',
          'products' :  pro, 
          'form'     : form, 
+         'page'     :  page,
       }    
    return render(request,'products/products.html', context)
 
